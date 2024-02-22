@@ -55,20 +55,18 @@ export default async function ShipsList() {
 
     return (
         <ul className="grid grid-cols-6 gap-5">
-            {data?.map((v) => {
-                return (
-                    <li key={v?.id} className="outline-secondary-2 flex flex-col items-center outline">
-                        <Image
-                            src={'https:' + v?.icons?.medium}
-                            alt={v?.title}
-                            width={200}
-                            height={200}
-                            className="h-auto w-auto"
-                        />
-                        <p>{v?.title}</p>
-                    </li>
-                );
-            })}
+            {data?.map((v) => (
+                <li key={v?.id} className="outline-secondary-2 flex flex-col items-center outline">
+                    <Image
+                        src={`https:${v?.icons?.medium}`}
+                        alt={v?.title as string}
+                        width={200}
+                        height={200}
+                        className="h-auto w-auto"
+                    />
+                    <p>{v?.title}</p>
+                </li>
+            ))}
         </ul>
     );
 }

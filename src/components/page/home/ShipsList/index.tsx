@@ -2,6 +2,7 @@ import getClient from '@/lib/apollo-client';
 import { gql } from '@/lib/gql/gql';
 
 import Card from './Card';
+import CardSkeleton from './Card/Skeleton';
 
 const allShipsQuery = gql(`query ExampleQuery {
   vehicles(lang: "ru", isCatalogue: true) {
@@ -55,7 +56,7 @@ export default async function ShipsList() {
     }
 
     return (
-        <ul className="grid items-start gap-3 transition-all md:grid-cols-2 lg:grid-cols-3 lg:gap-4 xl:grid-cols-4 xl:gap-6">
+        <ul className="grid items-stretch gap-3 transition-all md:grid-cols-2 lg:grid-cols-3 lg:gap-4 xl:grid-cols-4 xl:gap-6">
             {data?.map((v) => (
                 <Card
                     key={v?.id}
@@ -76,6 +77,7 @@ export default async function ShipsList() {
                     }}
                 />
             ))}
+            <CardSkeleton />
         </ul>
     );
 }

@@ -26,7 +26,7 @@ type ShipData = {
 
 export default function Card({ data: { id, image, title, level, type, nation } }: { data: ShipData }) {
     return (
-        <li className="group relative grid aspect-[16/9] rounded-lg [grid-template-areas:stack]">
+        <li className="group relative grid aspect-[16/9] rounded-[16px] transition-shadow [grid-template-areas:stack]">
             <Link className="absolute inset-0 z-10" href={`/ship/${id}`}>
                 <span className="sr-only">Подробнее</span>
             </Link>
@@ -43,9 +43,8 @@ export default function Card({ data: { id, image, title, level, type, nation } }
                 className="relative overflow-hidden rounded-2xl transition-opacity duration-300 [grid-area:stack]"
                 aria-hidden
             >
-                {/* <div className="bg-secondary-1 size-20 translate-y-1/3 place-self-center rounded-full opacity-10 blur-3xl transition-opacity duration-300 [grid-area:stack] group-hover:opacity-80" /> */}
                 <Image
-                    src={glow.src as string}
+                    src={(glow as { src: string }).src}
                     alt="glow"
                     className="object-fit translate-y-1/3 opacity-10 transition-opacity duration-300 group-hover:opacity-50"
                     layout="fill"
@@ -59,9 +58,9 @@ export default function Card({ data: { id, image, title, level, type, nation } }
                 <Image src={image} alt={title} className="object-fit" width={400} height={300} />
             </div>
 
-            <div className="border-s-secondary-1/40 flex flex-1 flex-col gap-1 p-4 [grid-area:stack]">
+            <div className="flex flex-1 flex-col gap-1 p-4 [grid-area:stack]">
                 <h3 className="flex items-center justify-between gap-2 align-middle text-base font-semibold">
-                    <span className="opacity-80">{title}</span>
+                    <span className="opacity-90">{title}</span>
                     <div className="relative size-8 opacity-60">
                         <Image src={type.icon} alt={type.title} layout="fill" />
                     </div>

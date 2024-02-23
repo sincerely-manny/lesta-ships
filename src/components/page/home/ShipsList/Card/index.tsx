@@ -2,6 +2,7 @@ import roman from '@/lib/levels';
 import Image from 'next/image';
 import Link from 'next/link';
 import Bg from './Bg';
+import glow from './images/glow.svg';
 
 type ShipTypeData = {
     title: string;
@@ -25,11 +26,11 @@ type ShipData = {
 
 export default function Card({ data: { id, image, title, level, type, nation } }: { data: ShipData }) {
     return (
-        <li className="group relative grid aspect-[16/9] overflow-hidden rounded-lg p-1 [grid-template-areas:stack]">
+        <li className="group relative grid aspect-[16/9] rounded-lg [grid-template-areas:stack]">
             <Link className="absolute inset-0 z-10" href={`/ship/${id}`}>
                 <span className="sr-only">Подробнее</span>
             </Link>
-            <div className="w-[90%] place-self-center [grid-area:stack]">
+            <div className="w-[90%] place-self-center [grid-area:stack]" aria-hidden>
                 <Image
                     src={nation.icon}
                     alt={title}
@@ -38,7 +39,18 @@ export default function Card({ data: { id, image, title, level, type, nation } }
                     height={300}
                 />
             </div>
-            <div className="bg-secondary-1 size-20 translate-y-1/3 place-self-center rounded-full opacity-10 blur-3xl transition-opacity duration-300 [grid-area:stack] group-hover:opacity-80" />
+            <div
+                className="relative overflow-hidden rounded-2xl transition-opacity duration-300 [grid-area:stack]"
+                aria-hidden
+            >
+                {/* <div className="bg-secondary-1 size-20 translate-y-1/3 place-self-center rounded-full opacity-10 blur-3xl transition-opacity duration-300 [grid-area:stack] group-hover:opacity-80" /> */}
+                <Image
+                    src={glow.src as string}
+                    alt="glow"
+                    className="object-fit translate-y-1/3 opacity-10 transition-opacity duration-300 group-hover:opacity-50"
+                    layout="fill"
+                />
+            </div>
             <Bg
                 className="aspect-[16/9] overflow-hidden object-fill opacity-30 transition-opacity [grid-area:stack] group-hover:opacity-50"
                 color={nation.color}
@@ -50,7 +62,7 @@ export default function Card({ data: { id, image, title, level, type, nation } }
             <div className="border-s-secondary-1/40 flex flex-1 flex-col gap-1 p-4 [grid-area:stack]">
                 <h3 className="flex items-center justify-between gap-2 align-middle text-base font-semibold">
                     <span className="opacity-80">{title}</span>
-                    <div className="relative size-6 opacity-60">
+                    <div className="relative size-8 opacity-60">
                         <Image src={type.icon} alt={type.title} layout="fill" />
                     </div>
                 </h3>

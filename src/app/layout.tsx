@@ -1,3 +1,5 @@
+import Footer from '@/components/shared/Footer';
+import Header from '@/components/shared/Header';
 import '@/styles/globals.css';
 import { type Viewport } from 'next';
 
@@ -55,7 +57,15 @@ export const viewport: Viewport = {
 export default function RootLayout({ children }: { children: React.ReactNode }) {
     return (
         <html lang="en">
-            <body className={`font-sans ${inter.variable} text-while min-h-screen`}>{children}</body>
+            <body
+                className={`font-sans ${inter.variable} from-primary min-h-screen bg-gradient-to-br to-black text-white`}
+            >
+                <div className="container mx-auto  p-5">
+                    <Header />
+                    {children}
+                    <Footer />
+                </div>
+            </body>
         </html>
     );
 }

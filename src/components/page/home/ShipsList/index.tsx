@@ -1,6 +1,7 @@
 import getClient from '@/lib/apollo-client';
 import { gql } from '@/lib/gql/gql';
-import Image from 'next/image';
+
+import Card from './Card';
 
 const allShipsQuery = gql(`query ExampleQuery {
   vehicles(lang: "ru", isCatalogue: true) {
@@ -48,24 +49,32 @@ const getShipsPaginated = async ({ limit, offset }: { limit: number; offset: num
 };
 
 export default async function ShipsList() {
-    const { data, error } = await getShipsPaginated({ limit: 25, offset: 0 });
+    const { data, error } = await getShipsPaginated({ limit: 24, offset: 0 });
     if (error) {
         return <div>Error loading data: {error.message}</div>;
     }
 
     return (
-        <ul className="grid grid-cols-6 gap-5">
+        <ul className="grid items-start gap-3 transition-all md:grid-cols-2 lg:grid-cols-3 lg:gap-4 xl:grid-cols-4 xl:gap-6">
             {data?.map((v) => (
-                <li key={v?.id} className="outline-secondary-2 flex flex-col items-center outline">
-                    <Image
-                        src={`https:${v?.icons?.medium}`}
-                        alt={v?.title as string}
-                        width={200}
-                        height={200}
-                        className="h-auto w-auto"
-                    />
-                    <p>{v?.title}</p>
-                </li>
+                <Card
+                    key={v?.id}
+                    data={{
+                        id: v?.id ?? '',
+                        title: (v?.title as string) ?? '',
+                        image: `https:${v?.icons?.medium}`,
+                        level: v?.level ?? '0',
+                        type: {
+                            title: (v?.type?.title as string) ?? '',
+                            icon: `https:${v?.type?.icons?.default}`,
+                        },
+                        nation: {
+                            title: (v?.nation?.title as string) ?? '',
+                            color: (v?.nation?.color as string) ?? '',
+                            icon: `https:${v?.nation?.icons?.large}`,
+                        },
+                    }}
+                />
             ))}
         </ul>
     );

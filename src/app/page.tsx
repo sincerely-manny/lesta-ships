@@ -3,7 +3,7 @@ import { Suspense } from 'react';
 
 export default function HomePage() {
     return (
-        <main className="from-primary flex min-h-screen w-full flex-col items-center justify-center bg-gradient-to-br to-black text-white">
+        <main className="flex min-h-screen w-full flex-col items-center justify-center ">
             <div className="">
                 <h1>111</h1>
                 <Suspense fallback={<div>Loading ships...</div>}>

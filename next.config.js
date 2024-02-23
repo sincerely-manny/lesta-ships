@@ -15,6 +15,12 @@ const config = {
                 port: '',
                 pathname: '/icons/vehicle/**',
             },
+            {
+                protocol: 'https',
+                hostname: 'glossary.korabli.su',
+                port: '',
+                pathname: '/icons/nation_flags/**',
+            },
         ],
     },
 };

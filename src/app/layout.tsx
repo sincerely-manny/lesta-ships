@@ -6,7 +6,7 @@ import { type Viewport } from 'next';
 import { Inter } from 'next/font/google';
 
 const inter = Inter({
-    subsets: ['latin'],
+    subsets: ['latin', 'cyrillic'],
     variable: '--font-sans',
 });
 

@@ -14,9 +14,28 @@ import { Loader2 } from 'lucide-react';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { twMerge } from 'tailwind-merge';
 
+function generatePageLinks(currentPage: number, totalPages: number): number[] {
+    const links: number[] = [];
+    links.push(1);
+    if (currentPage > 4) {
+        links.push(-1);
+    }
+    for (let i = Math.max(2, currentPage - 2); i <= Math.min(currentPage + 2, totalPages - 1); i++) {
+        links.push(i);
+    }
+    if (currentPage < totalPages - 3) {
+        links.push(-2);
+    }
+    links.push(totalPages);
+
+    return links;
+}
+
 type ShipsListPaginationProps = { limit: number; page: number; total: number; className?: string };
 
 export default function ShipsListPagination({ limit, page, total, className = '' }: ShipsListPaginationProps) {
+    const totalPages = Math.ceil(total / limit);
+    const links = generatePageLinks(page, totalPages);
     const [loading, setLoading] = useState<undefined | number>(undefined);
     const [sticky, setSticky] = useState(false);
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -53,23 +72,33 @@ export default function ShipsListPagination({ limit, page, total, className = ''
                                 onClick={() => setLoading(page - 1)}
                             />
                         </PaginationItem>
-                        {new Array(Math.ceil(total / limit)).fill(null).map((_, i) => (
-                            <PaginationItem key={Math.random()}>
-                                <PaginationLink
-                                    href={`/?page=${i + 1}`}
-                                    isActive={i + 1 === page}
-                                    onClick={() => setLoading(i + 1)}
+                        {links.map((p) =>
+                            p > 0 ? (
+                                <PaginationItem
+                                    key={p}
+                                    className={
+                                        (page > 3 && p === 1) || (page < totalPages - 2 && p === totalPages)
+                                            ? 'hidden sm:inline-block'
+                                            : ''
+                                    }
                                 >
-                                    {loading === i + 1 ? <Loader2 size={16} className="animate-spin" /> : i + 1}
-                                </PaginationLink>
-                            </PaginationItem>
-                        ))}
-                        <PaginationItem>
-                            <PaginationEllipsis />
-                        </PaginationItem>
+                                    <PaginationLink
+                                        href={`/?page=${p}`}
+                                        isActive={p === page}
+                                        onClick={() => setLoading(p)}
+                                    >
+                                        {loading === p ? <Loader2 size={16} className="animate-spin" /> : p}
+                                    </PaginationLink>
+                                </PaginationItem>
+                            ) : (
+                                <PaginationItem key={p} className="hidden sm:inline-block">
+                                    <PaginationEllipsis />
+                                </PaginationItem>
+                            ),
+                        )}
                         <PaginationItem>
                             <PaginationNext
-                                href={page !== Math.ceil(total / limit) ? `/?page=${page + 1}` : undefined}
+                                href={page !== totalPages ? `/?page=${page + 1}` : undefined}
                                 onClick={() => setLoading(page + 1)}
                             />
                         </PaginationItem>

@@ -34,13 +34,9 @@ export default function Card({ data: { id, image, title, level, type, nation } }
                 <Image
                     src={nation.icon}
                     alt={title}
-                    className="object-cover opacity-10 transition-opacity duration-500 group-hover:opacity-20"
+                    className="h-auto max-w-full object-cover opacity-10 transition-opacity duration-500 group-hover:opacity-20"
                     width={400}
                     height={300}
-                    style={{
-                        maxWidth: '100%',
-                        height: 'auto',
-                    }}
                 />
             </div>
             <div
@@ -60,7 +56,14 @@ export default function Card({ data: { id, image, title, level, type, nation } }
                 color={nation.color}
             />
             <div className="relative w-[90%] place-self-center opacity-80 [grid-area:stack]">
-                <Image src={image} alt={title} className="object-fit h-auto max-w-full" width={400} height={300} />
+                <Image
+                    src={image}
+                    alt={title}
+                    className="object-fit h-auto max-w-full"
+                    width={400}
+                    height={300}
+                    key={id}
+                />
             </div>
 
             <div className="flex flex-1 flex-col gap-1 p-4 [grid-area:stack]">

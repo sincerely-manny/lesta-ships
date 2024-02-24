@@ -1,5 +1,5 @@
 import roman from '@/lib/levels';
-import Image from 'next/image';
+import Image from "next/legacy/image";
 import Link from 'next/link';
 import Bg from './Bg';
 import glow from './images/glow.svg';

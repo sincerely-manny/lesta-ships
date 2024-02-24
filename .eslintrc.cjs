@@ -36,6 +36,13 @@ const config = {
                 checksVoidReturn: { attributes: false },
             },
         ],
+        'react/require-default-props': [
+            'error',
+            {
+                forbidDefaultForRequired: true,
+                functions: 'defaultArguments',
+            },
+        ],
     },
 };
 

@@ -2,7 +2,7 @@ import getClient from '@/lib/apollo-client';
 import { gql } from '@/lib/gql/gql';
 
 import Card from './Card';
-import CardSkeleton from './Card/Skeleton';
+import ShipsListPagination from './Pagination';
 
 const allShipsQuery = gql(`query ExampleQuery {
   vehicles(lang: "ru", isCatalogue: true) {
@@ -46,38 +46,53 @@ const getShipsPaginated = async ({ limit, offset }: { limit: number; offset: num
         return { data: null, error: { message: 'Unknown error retrieving ships' } };
     }
     const vehicles = data.vehicles.slice(offset, offset + limit);
-    return { data: vehicles, error };
+    const summary = {
+        total: data.vehicles.length,
+        limit,
+        offset,
+    };
+    return { data: vehicles, summary, error };
 };
 
-export default async function ShipsList() {
-    const { data, error } = await getShipsPaginated({ limit: 24, offset: 0 });
+type ShipsListProps = {
+    limit?: number;
+    page?: number;
+};
+
+export default async function ShipsList({ limit = 24, page = 1 }: ShipsListProps) {
+    // const page = searchParams?.page && !isArray(searchParams.page) ? parseInt(searchParams.page, 10) : 1;
+    const offset = (page - 1) * limit;
+    const { data, error, summary } = await getShipsPaginated({ limit, offset });
     if (error) {
         return <div>Error loading data: {error.message}</div>;
     }
 
     return (
-        <ul className="grid items-stretch gap-3 transition-all md:grid-cols-2 lg:grid-cols-3 lg:gap-4 xl:grid-cols-4 xl:gap-6">
-            {data?.map((v) => (
-                <Card
-                    key={v?.id}
-                    data={{
-                        id: v?.id ?? '',
-                        title: (v?.title as string) ?? '',
-                        image: `https:${v?.icons?.medium}`,
-                        level: v?.level ?? '0',
-                        type: {
-                            title: (v?.type?.title as string) ?? '',
-                            icon: `https:${v?.type?.icons?.default}`,
-                        },
-                        nation: {
-                            title: (v?.nation?.title as string) ?? '',
-                            color: (v?.nation?.color as string) ?? '',
-                            icon: `https:${v?.nation?.icons?.large}`,
-                        },
-                    }}
-                />
-            ))}
-            <CardSkeleton />
-        </ul>
+        <>
+            <ShipsListPagination limit={limit} page={page} total={summary?.total ?? 0} />
+            <ul className="grid items-stretch gap-3 transition-all md:grid-cols-2 lg:grid-cols-3 lg:gap-4 xl:grid-cols-4 xl:gap-6">
+                {data?.map((v) => (
+                    <Card
+                        key={v?.id}
+                        data={{
+                            id: v?.id ?? '',
+                            title: (v?.title as string) ?? '',
+                            image: `https:${v?.icons?.medium}`,
+                            level: v?.level ?? '0',
+                            type: {
+                                title: (v?.type?.title as string) ?? '',
+                                icon: `https:${v?.type?.icons?.default}`,
+                            },
+                            nation: {
+                                title: (v?.nation?.title as string) ?? '',
+                                color: (v?.nation?.color as string) ?? '',
+                                icon: `https:${v?.nation?.icons?.large}`,
+                            },
+                        }}
+                    />
+                ))}
+            </ul>
+            <ShipsListPagination limit={limit} page={page} total={summary?.total ?? 0} />
+        </>
     );
 }

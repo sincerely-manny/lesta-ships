@@ -60,8 +60,8 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             <body
                 className={`font-sans ${inter.variable} from-primary min-h-screen bg-gradient-to-br to-black text-white`}
             >
-                <div className="container mx-auto  p-5">
-                    <Header />
+                <div className="container mx-auto p-5">
+                    <Header className="mb-10" />
                     {children}
                     <Footer />
                 </div>

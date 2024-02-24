@@ -37,10 +37,18 @@ type PaginationLinkProps = {
 } & Pick<ButtonProps, 'size'> &
     React.ComponentProps<'a'>;
 
-function PaginationLink({ className, isActive = false, size = 'icon', children = null, href }: PaginationLinkProps) {
+function PaginationLink({
+    className,
+    isActive = false,
+    size = 'icon',
+    children = null,
+    href,
+    onClick,
+}: PaginationLinkProps) {
+    const Element = href ? Link : 'span';
     return (
-        <Link
-            href={href ?? '#'}
+        <Element
+            href={href ?? ''}
             aria-current={isActive ? 'page' : undefined}
             className={cn(
                 buttonVariants({
@@ -48,10 +56,12 @@ function PaginationLink({ className, isActive = false, size = 'icon', children =
                     size,
                 }),
                 className,
+                'border-secondary-2',
             )}
+            onClick={onClick}
         >
             {children}
-        </Link>
+        </Element>
     );
 }
 PaginationLink.displayName = 'PaginationLink';
@@ -59,14 +69,13 @@ PaginationLink.displayName = 'PaginationLink';
 function PaginationPrevious({ className, ...props }: React.ComponentProps<typeof PaginationLink>) {
     return (
         <PaginationLink
-            aria-label="Go to previous page"
+            aria-label="Предыдущая страница"
             size="default"
             className={cn('gap-1 pl-2.5', className)}
             // eslint-disable-next-line react/jsx-props-no-spreading
             {...props}
         >
-            <ChevronLeft className="h-4 w-4" />
-            <span>Previous</span>
+            <ChevronLeft className="h-6 w-6" />
         </PaginationLink>
     );
 }
@@ -75,14 +84,13 @@ PaginationPrevious.displayName = 'PaginationPrevious';
 function PaginationNext({ className, ...props }: React.ComponentProps<typeof PaginationLink>) {
     return (
         <PaginationLink
-            aria-label="Go to next page"
+            aria-label="Следующая страница"
             size="default"
             className={cn('gap-1 pr-2.5', className)}
             // eslint-disable-next-line react/jsx-props-no-spreading
             {...props}
         >
-            <span>Next</span>
-            <ChevronRight className="h-4 w-4" />
+            <ChevronRight className="h-6 w-6" />
         </PaginationLink>
     );
 }

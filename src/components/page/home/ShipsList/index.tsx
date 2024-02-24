@@ -60,16 +60,16 @@ type ShipsListProps = {
 };
 
 export default async function ShipsList({ limit = 24, page = 1 }: ShipsListProps) {
+    // unstable_noStore();
+    // await new Promise((resolve) => setTimeout(resolve, 1000));
     // const page = searchParams?.page && !isArray(searchParams.page) ? parseInt(searchParams.page, 10) : 1;
     const offset = (page - 1) * limit;
     const { data, error, summary } = await getShipsPaginated({ limit, offset });
     if (error) {
         return <div>Error loading data: {error.message}</div>;
     }
-
     return (
-        <>
-            <ShipsListPagination limit={limit} page={page} total={summary?.total ?? 0} />
+        <section className="relative flex flex-col items-center">
             <ul className="grid items-stretch gap-3 transition-all md:grid-cols-2 lg:grid-cols-3 lg:gap-4 xl:grid-cols-4 xl:gap-6">
                 {data?.map((v) => (
                     <Card
@@ -92,7 +92,8 @@ export default async function ShipsList({ limit = 24, page = 1 }: ShipsListProps
                     />
                 ))}
             </ul>
-            <ShipsListPagination limit={limit} page={page} total={summary?.total ?? 0} />
-        </>
+
+            <ShipsListPagination limit={limit} page={page} total={summary?.total ?? 0} key={Date.now()} />
+        </section>
     );
 }

@@ -3,11 +3,9 @@ import Bg from './Bg';
 
 export default function CardSkeleton() {
     return (
-        <li className="group relative grid aspect-[16/9] rounded-lg outline-white [grid-template-areas:stack]">
-            <div className="aspect-[16/9] h-full w-full [grid-area:stack]">
-                <Bg className="object-fill opacity-30" color="#FFFFFF" />
-            </div>
-            <div className="flex flex-1 flex-col gap-1 p-4 opacity-70 [grid-area:stack]">
+        <li className="group relative grid aspect-[16/9] rounded-[16px] transition-shadow">
+            <Bg className=" absolute aspect-[16/9] object-fill opacity-30" color="#FFFFFF" />
+            <div className="flex flex-1 flex-col gap-1 p-4 opacity-70">
                 <div className="flex h-8 items-center justify-between align-middle">
                     <Skeleton className="h-5 w-1/2" />
                     <Skeleton className="mr-2 h-8 w-8" />

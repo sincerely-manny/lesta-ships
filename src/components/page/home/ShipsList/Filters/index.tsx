@@ -68,7 +68,7 @@ export default function ShipsListFilters({ className = '', data: { types, nation
                     </PopoverContent>
                 </Popover>
             </div>
-            <div className="flex min-h-5 flex-wrap gap-3 text-xs">
+            <div className="flex min-h-6 flex-wrap gap-3 text-xs">
                 {nationsChecked.map(
                     (key) =>
                         nations[key] && (

@@ -66,17 +66,24 @@ export default function Card({ data: { id, image, title, level, type, nation } }
                 />
             </div>
 
-            <div className="flex flex-1 flex-col gap-1 p-4 [grid-area:stack]">
-                <h3 className="flex items-center justify-between gap-2 align-middle text-base font-semibold">
-                    <span className="opacity-90">{title}</span>
-                    <div className="relative size-8 opacity-60">
-                        <Image src={type.icon} alt={type.title} fill sizes="100vw" />
+            <div className="p-4 [grid-area:stack]">
+                <div className="flex items-start justify-between text-base">
+                    <h3 className="font-semibold">
+                        <span className="opacity-90">{title}</span>
+                        <div className="flex items-center gap-1 opacity-60" aria-hidden>
+                            <span title={`Уровень ${level}`}>{roman(level)}</span>
+                            <div className="relative size-8" title={type.title}>
+                                <Image src={type.icon} alt={type.title} fill />
+                            </div>
+                        </div>
+                    </h3>
+                    <div className="text-right">
+                        <p className="text-xs font-light opacity-70">
+                            {type.title} – Уровень {roman(level)}
+                        </p>
+                        <p className="text-xs font-light opacity-70">{nation.title}</p>
                     </div>
-                </h3>
-                <p className="text-xs font-light opacity-70">
-                    {type.title} – Уровень {roman(level)}
-                </p>
-                <p className="text-xs font-light opacity-70">{nation.title}</p>
+                </div>
             </div>
         </li>
     );

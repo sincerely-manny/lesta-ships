@@ -9,12 +9,19 @@ import {
     PaginationNext,
     PaginationPrevious,
 } from '@/components/ui/pagination';
+import useQueryParams from '@/lib/query-params';
 import throttle from 'lodash.throttle';
 import { Loader2 } from 'lucide-react';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { twMerge } from 'tailwind-merge';
 
 function generatePageLinks(currentPage: number, totalPages: number): number[] {
+    if (totalPages <= 1) {
+        return [];
+    }
+    if (totalPages <= 5) {
+        return Array.from({ length: totalPages }, (_, i) => i + 1);
+    }
     const links: number[] = [];
     links.push(1);
     if (currentPage > 4) {
@@ -38,6 +45,7 @@ export default function ShipsListPagination({ limit, page, total, className = ''
     const links = generatePageLinks(page, totalPages);
     const [loading, setLoading] = useState<undefined | number>(undefined);
     const [sticky, setSticky] = useState(false);
+    const { set } = useQueryParams();
     // eslint-disable-next-line react-hooks/exhaustive-deps
     const setStickyThrottled = useCallback(throttle(setSticky, 10), []);
     const spacerDiv = useRef<HTMLDivElement>(null);
@@ -53,7 +61,9 @@ export default function ShipsListPagination({ limit, page, total, className = ''
     useEffect(() => {
         setSticky((spacerDiv.current?.getBoundingClientRect().bottom ?? 0) - window.innerHeight <= 0);
     }, []);
-
+    if (!links.length) {
+        return null;
+    }
     return (
         <>
             <div className="mt-5 h-20" ref={spacerDiv} />
@@ -68,7 +78,7 @@ export default function ShipsListPagination({ limit, page, total, className = ''
                     <PaginationContent>
                         <PaginationItem>
                             <PaginationPrevious
-                                href={page !== 1 ? `/?page=${page - 1}` : undefined}
+                                href={page !== 1 ? `/?${set('page', page - 1)}` : undefined}
                                 onClick={() => setLoading(page - 1)}
                             />
                         </PaginationItem>
@@ -83,7 +93,7 @@ export default function ShipsListPagination({ limit, page, total, className = ''
                                     }
                                 >
                                     <PaginationLink
-                                        href={`/?page=${p}`}
+                                        href={`/?${set('page', p)}`}
                                         isActive={p === page}
                                         onClick={() => setLoading(p)}
                                     >
@@ -98,7 +108,7 @@ export default function ShipsListPagination({ limit, page, total, className = ''
                         )}
                         <PaginationItem>
                             <PaginationNext
-                                href={page !== totalPages ? `/?page=${page + 1}` : undefined}
+                                href={page !== totalPages ? `/?${set('page', page + 1)}` : undefined}
                                 onClick={() => setLoading(page + 1)}
                             />
                         </PaginationItem>

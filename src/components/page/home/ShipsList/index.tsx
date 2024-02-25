@@ -1,14 +1,15 @@
 import Card from './Card';
 import ShipsListPagination from './Pagination';
 import ShipsListFilters from './Filters';
-import { getAllShips, getNations, getShipsPaginated, getTypes } from './data/ships';
+import { type Filters, getAllShips, getNations, getShipsFiltered, getShipsPaginated, getTypes } from './data/ships';
 
 type ShipsListProps = {
     limit?: number;
     page?: number;
+    filters?: Filters;
 };
 
-export default async function ShipsList({ limit = 24, page = 1 }: ShipsListProps) {
+export default async function ShipsList({ limit = 24, page = 1, filters }: ShipsListProps) {
     const offset = (page - 1) * limit;
     const {
         data: { vehicles: allShips },
@@ -17,15 +18,16 @@ export default async function ShipsList({ limit = 24, page = 1 }: ShipsListProps
     if (error) {
         return <div>Error loading data: {error.message}</div>;
     }
-    const types = await getTypes(allShips).then((res) => res?.data);
-    const nations = await getNations(allShips).then((res) => res?.data);
+    const types = getTypes(allShips).data;
+    const nations = getNations(allShips).data;
     if (!types || !nations) {
-        return <div>Error loading filters</div>;
+        return <div>Error loading data</div>;
     }
-    const total = allShips?.length;
-    const { data } = await getShipsPaginated({ limit, offset, ships: allShips });
+    const filtered = getShipsFiltered(allShips, filters ?? {}).data;
+    const total = filtered?.length ?? 0;
+    const { data } = getShipsPaginated({ limit, offset, ships: filtered });
     return (
-        <section className="relative flex flex-col items-center">
+        <section className="relative flex w-full flex-col items-center">
             <div className="mb-10 flex w-full justify-between">
                 <ShipsListFilters data={{ types, nations }} />
                 <div />

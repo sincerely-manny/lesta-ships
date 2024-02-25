@@ -39,7 +39,7 @@ export const getAllShips = async () => {
 
 type Vehicles = Awaited<ReturnType<typeof getAllShips>>['data']['vehicles'];
 
-export const getTypes = async (data: Vehicles) => {
+export const getTypes = (data: Vehicles) => {
     if (!data) {
         return { data: null, error: { message: 'Unknown error retrieving types' } };
     }
@@ -52,7 +52,7 @@ export const getTypes = async (data: Vehicles) => {
     return { data: Object.fromEntries(types), error: null };
 };
 
-export const getNations = async (data: Vehicles) => {
+export const getNations = (data: Vehicles) => {
     if (!data) {
         return { data: null, error: { message: 'Unknown error retrieving nations' } };
     }
@@ -65,15 +65,27 @@ export const getNations = async (data: Vehicles) => {
     return { data: Object.fromEntries(nations), error: null };
 };
 
-export const getShipsPaginated = async ({
-    ships,
-    limit,
-    offset,
-}: {
-    ships: Vehicles;
-    limit: number;
-    offset: number;
-}) => {
+export type Filters = {
+    types?: string[];
+    nations?: string[];
+    tiers?: string[];
+};
+
+export const getShipsFiltered = (data: Vehicles, filters: Filters) => {
+    if (!data) {
+        return { data: null, error: { message: 'Unknown error filtering ships' } };
+    }
+    const fitlered = data.filter((v) => {
+        const type = !filters.types || filters.types.length === 0 || filters.types.includes(v?.type?.name ?? '');
+        const nation =
+            !filters.nations || filters.nations.length === 0 || filters.nations.includes(v?.nation?.name ?? '');
+        const tier = !filters.tiers || filters.tiers.length === 0 || filters.tiers.includes(v?.level?.toString() ?? '');
+        return type && nation && tier;
+    });
+    return { data: fitlered, error: null };
+};
+
+export const getShipsPaginated = ({ ships, limit, offset }: { ships: Vehicles; limit: number; offset: number }) => {
     if (!ships) {
         return { data: null, error: { message: 'Unknown error retrieving ships' } };
     }

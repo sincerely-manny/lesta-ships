@@ -30,7 +30,7 @@ function useCheckboxGroup(initial: string[] = []) {
 export default function ShipsListFilters({ className = '', data: { types, nations } }: ShipsListFiltersProps) {
     const router = useRouter();
     const pathname = usePathname();
-    const { set, remove, get } = useQueryParams();
+    const { get } = useQueryParams();
     const [nationsChecked, onNationCheckedChange, isNationChecked] = useCheckboxGroup(get('nations')?.split(',') ?? []);
     const [typesChecked, onTypeCheckedChange, isTypeChecked] = useCheckboxGroup(get('types')?.split(',') ?? []);
     const [tiersChecked, onTierCheckedChange, isTierChecked] = useCheckboxGroup(get('tiers')?.split(',') ?? []);
@@ -47,22 +47,7 @@ export default function ShipsListFilters({ className = '', data: { types, nation
             query.set('nations', nationsChecked.join(','));
         }
         router.push(`${pathname}?${query.toString()}`);
-        // if (tiersChecked.length) {
-        //     router.push(`${pathname}?${set('tiers', tiersChecked.join(','))}`);
-        // } else {
-        //     router.push(`${pathname}?${remove('tiers')}`);
-        // }
-        // if (typesChecked.length) {
-        //     router.push(`${pathname}?${set('types', typesChecked.join(','))}`);
-        // } else {
-        //     router.push(`${pathname}?${remove('types')}`);
-        // }
-        // if (nationsChecked.length) {
-        //     router.push(`${pathname}?${set('nations', nationsChecked.join(','))}`);
-        // } else {
-        //     router.push(`${pathname}?${remove('nations')}`);
-        // }
-    }, [tiersChecked, typesChecked, nationsChecked, pathname, set, remove, router]);
+    }, [tiersChecked, typesChecked, nationsChecked, pathname, router]);
 
     return (
         <div className="flex flex-col gap-3">
@@ -106,7 +91,7 @@ export default function ShipsListFilters({ className = '', data: { types, nation
                 <Popover>
                     <PopoverTrigger>Уровни</PopoverTrigger>
                     <PopoverContent className="flex flex-col gap-1">
-                        {Array.from({ length: 10 }, (_, i) => i + 1).map((tier) => (
+                        {Array.from({ length: 9 }, (_, i) => i + 2).map((tier) => (
                             <div key={tier} className="grid grid-cols-[1.5rem_1fr_24px] items-center gap-2">
                                 <Checkbox
                                     id={`tier-${tier}`.toString()}

@@ -12,7 +12,7 @@ export default function Header({ className }: HTMLProps<HTMLDivElement>) {
     const isHome = pathname === '/';
     return (
         <header className={twMerge('flex items-center justify-center gap-20', className)}>
-            {!isHome ? (
+            {isHome ? (
                 <span>
                     <Image
                         src={logo}

@@ -14,7 +14,6 @@ export default function ShipsListSkeleton({ limit = 24 }: ShipsListSkeletonProps
                     <CardSkeleton key={i} />
                 ))}
             </ul>
-            <Skeleton className="h-10 w-1/3 self-center" />
         </section>
     );
 }

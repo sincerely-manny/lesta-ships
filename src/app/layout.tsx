@@ -58,7 +58,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     return (
         <html lang="en">
             <body
-                className={`font-sans ${inter.variable} from-primary min-h-screen bg-gradient-to-br to-black text-white`}
+                className={`font-sans ${inter.variable} from-secondary-1 min-h-screen bg-gradient-to-br to-black text-white`}
             >
                 <div className="container mx-auto p-5">
                     <Header className="mb-10" />

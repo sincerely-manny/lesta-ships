@@ -12,9 +12,9 @@ export default {
             current: 'currentColor',
             white: '#F2EFF1',
             black: '#17181C',
-            primary: '#17293B',
+            primary: '#5FA3BD',
             secondary: {
-                1: '#5FA3BD',
+                1: '#17293B',
                 2: '#6D7D8E',
             },
             prose: {

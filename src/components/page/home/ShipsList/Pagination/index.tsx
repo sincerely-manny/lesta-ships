@@ -56,10 +56,10 @@ export default function ShipsListPagination({ limit, page, total, className = ''
 
     return (
         <>
-            <div className="h-40" ref={spacerDiv} />
+            <div className="mt-5 h-20" ref={spacerDiv} />
             <div
                 className={twMerge(
-                    'pointer-events-none fixed bottom-0 z-10 flex h-40 items-center justify-center transition-opacity duration-300 hover:opacity-100',
+                    'pointer-events-none fixed bottom-0 z-10 flex h-20 items-center justify-center transition-opacity duration-300 hover:opacity-100',
                     sticky ? 'relative -translate-y-full opacity-100' : 'fixed translate-y-0 opacity-80',
                     className,
                 )}

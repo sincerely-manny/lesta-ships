@@ -1,58 +1,7 @@
-import getClient from '@/lib/apollo-client';
-import { gql } from '@/lib/gql/gql';
-
 import Card from './Card';
 import ShipsListPagination from './Pagination';
-
-const allShipsQuery = gql(`query ExampleQuery {
-  vehicles(lang: "ru", isCatalogue: true) {
-    id
-    title
-    description
-    icons {
-      large
-      medium
-    }
-    level
-    type {
-      name
-    	title
-      icons {
-        default
-      }
-    }
-    nation {
-      name
-      title
-      color
-      icons {
-        small
-        medium
-        large
-      }
-    }
-  }
-}
-`);
-
-const getAllShips = async () => {
-    const { data, error } = await getClient().query({ query: allShipsQuery });
-    return { data, error };
-};
-
-const getShipsPaginated = async ({ limit, offset }: { limit: number; offset: number }) => {
-    const { data, error } = await getAllShips();
-    if (!data.vehicles) {
-        return { data: null, error: { message: 'Unknown error retrieving ships' } };
-    }
-    const vehicles = data.vehicles.slice(offset, offset + limit);
-    const summary = {
-        total: data.vehicles.length,
-        limit,
-        offset,
-    };
-    return { data: vehicles, summary, error };
-};
+import ShipsListFilters from './Filters';
+import { getAllShips, getNations, getShipsPaginated, getTypes } from './data/ships';
 
 type ShipsListProps = {
     limit?: number;
@@ -60,16 +9,27 @@ type ShipsListProps = {
 };
 
 export default async function ShipsList({ limit = 24, page = 1 }: ShipsListProps) {
-    // unstable_noStore();
-    // await new Promise((resolve) => setTimeout(resolve, 1000));
-    // const page = searchParams?.page && !isArray(searchParams.page) ? parseInt(searchParams.page, 10) : 1;
     const offset = (page - 1) * limit;
-    const { data, error, summary } = await getShipsPaginated({ limit, offset });
+    const {
+        data: { vehicles: allShips },
+        error,
+    } = await getAllShips();
     if (error) {
         return <div>Error loading data: {error.message}</div>;
     }
+    const types = await getTypes(allShips).then((res) => res?.data);
+    const nations = await getNations(allShips).then((res) => res?.data);
+    if (!types || !nations) {
+        return <div>Error loading filters</div>;
+    }
+    const total = allShips?.length;
+    const { data } = await getShipsPaginated({ limit, offset, ships: allShips });
     return (
         <section className="relative flex flex-col items-center">
+            <div className="mb-10 flex w-full justify-between">
+                <ShipsListFilters data={{ types, nations }} />
+                <div />
+            </div>
             <ul className="grid items-stretch gap-3 transition-all md:grid-cols-2 lg:grid-cols-3 lg:gap-4 xl:grid-cols-4 xl:gap-6">
                 {data?.map((v) => (
                     <Card
@@ -92,8 +52,7 @@ export default async function ShipsList({ limit = 24, page = 1 }: ShipsListProps
                     />
                 ))}
             </ul>
-
-            <ShipsListPagination limit={limit} page={page} total={summary?.total ?? 0} key={Date.now()} />
+            <ShipsListPagination limit={limit} page={page} total={total ?? 0} key={Date.now()} />
         </section>
     );
 }

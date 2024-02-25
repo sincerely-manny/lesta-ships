@@ -26,7 +26,7 @@ type ShipData = {
 
 export default function Card({ data: { id, image, title, level, type, nation } }: { data: ShipData }) {
     return (
-        <li className="group relative grid aspect-[16/9] rounded-[16px] transition-all duration-700 [grid-template-areas:stack]">
+        <li className="group relative grid aspect-[16/9] overflow-hidden rounded-[16px] transition-all duration-700 [grid-template-areas:stack]">
             <Link className="absolute inset-0 z-10" href={`/ship/${id}`}>
                 <span className="sr-only">Подробнее</span>
             </Link>

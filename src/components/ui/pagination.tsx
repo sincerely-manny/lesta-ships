@@ -56,7 +56,7 @@ function PaginationLink({
                     size,
                 }),
                 className,
-                'border-secondary-2',
+                'border-secondary-2 cursor-pointer opacity-70 transition-colors hover:opacity-90 aria-[current=page]:pointer-events-none',
             )}
             onClick={onClick}
         >
@@ -99,9 +99,9 @@ PaginationNext.displayName = 'PaginationNext';
 function PaginationEllipsis({ className, ...props }: React.ComponentProps<'span'>) {
     return (
         // eslint-disable-next-line react/jsx-props-no-spreading
-        <span aria-hidden className={cn('flex h-9 w-9 items-center justify-center', className)} {...props}>
+        <span aria-hidden className={cn('flex h-9 w-9 items-center justify-center opacity-70', className)} {...props}>
             <MoreHorizontal className="h-4 w-4" />
-            <span className="sr-only">More pages</span>
+            {/* <span className="sr-only">More pages</span> */}
         </span>
     );
 }

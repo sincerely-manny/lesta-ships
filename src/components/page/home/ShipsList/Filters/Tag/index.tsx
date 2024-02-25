@@ -12,7 +12,7 @@ export default function Tag({
             style={color ? { backgroundColor: `${color}20` } : {}}
         >
             <button type="button" onClick={action}>
-                <MinusCircle size={14} />
+                <MinusCircle size={13} strokeWidth={1} stroke="#FFF" />
                 <span className="sr-only">Удалить</span>
             </button>
             <span>{children}</span>

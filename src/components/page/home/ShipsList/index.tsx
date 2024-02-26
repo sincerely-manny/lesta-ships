@@ -29,7 +29,7 @@ export default async function ShipsList({ limit = 24, page = 1, filters }: Ships
     return (
         <section className="relative flex w-full flex-col items-center">
             <div className="mb-10 flex w-full justify-between">
-                <ShipsListFilters data={{ types, nations }} />
+                <ShipsListFilters data={{ types, nations, applied: filters ?? {} }} />
                 <div />
             </div>
             <ul className="grid items-stretch gap-3 transition-all md:grid-cols-2 lg:grid-cols-3 lg:gap-4 xl:grid-cols-4 xl:gap-6">

@@ -14,6 +14,7 @@ export default function HomePage({ searchParams }: { searchParams: Record<string
     const [types, nations, tiers] = ['types', 'nations', 'tiers'].map((k) => getParamArray(searchParams, k));
     return (
         <main className="flex w-full flex-col items-center justify-start ">
+            {/* key={JSON.stringify(searchParams)} */}
             <Suspense fallback={<ShipsListSkeleton limit={24} />}>
                 <ShipsList limit={24} page={page} filters={{ types, nations, tiers }} />
             </Suspense>

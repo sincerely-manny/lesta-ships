@@ -1,135 +1,175 @@
 'use client';
 
-import { Checkbox } from '@/components/ui/checkbox';
-import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
+import { Button } from '@/components/ui/button';
 import flags from '@/lib/flags';
 import roman from '@/lib/levels';
-import useQueryParams from '@/lib/query-params';
-import Image from 'next/image';
 import { usePathname, useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { twMerge } from 'tailwind-merge';
-import Tag from './Tag';
+import type { Filters } from '../data/ships';
+import Filter from './Filter';
+import Tags from './Tags';
 
 type ShipsListFiltersProps = {
     className?: string;
     data: {
         types: Record<string, { title: string; icon: string }>;
         nations: Record<string, { title: string; color: string }>;
+        applied: Filters;
     };
 };
 
-function useCheckboxGroup(initial: string[] = []) {
-    const [checked, setChecked] = useState<string[]>(initial);
-    const onCheckedChange = (key: string) => (v: boolean) =>
-        setChecked((prev) => (v ? [...prev, key] : prev.filter((x) => x !== key)));
-    const isChecked = (key: string) => checked.includes(key);
-    return [checked, onCheckedChange, isChecked, setChecked] as const;
+function getFiltersQueryString({ tiers, types, nations }: Filters) {
+    const query = new URLSearchParams();
+    if (tiers?.length) {
+        query.set('tiers', tiers.join(','));
+    }
+    if (types?.length) {
+        query.set('types', types.join(','));
+    }
+    if (nations?.length) {
+        query.set('nations', nations.join(','));
+    }
+    return query.toString();
 }
 
-export default function ShipsListFilters({ className = '', data: { types, nations } }: ShipsListFiltersProps) {
+function ApplyButton({ onClick }: { onClick: () => void }) {
+    return (
+        <Button onClick={onClick} className="mt-4 opacity-80" size="xs">
+            Применить
+        </Button>
+    );
+}
+
+export default function ShipsListFilters({ className = '', data: { types, nations, applied } }: ShipsListFiltersProps) {
     const router = useRouter();
     const pathname = usePathname();
-    const { get } = useQueryParams();
-    const [nationsChecked, onNationCheckedChange, isNationChecked] = useCheckboxGroup(get('nations')?.split(',') ?? []);
-    const [typesChecked, onTypeCheckedChange, isTypeChecked] = useCheckboxGroup(get('types')?.split(',') ?? []);
-    const [tiersChecked, onTierCheckedChange, isTierChecked] = useCheckboxGroup(get('tiers')?.split(',') ?? []);
+
+    const [nationsChecked, setNationsChecked] = useState(applied.nations ?? []);
+    const [typesChecked, setTypesChecked] = useState(applied.types ?? []);
+    const [tiersChecked, setTiersChecked] = useState(applied.tiers ?? []);
+
+    const [filtersQuery, setFiltersQuery] = useState(getFiltersQueryString(applied));
+    const [filtersQueryPrev, setFiltersQueryPrev] = useState(getFiltersQueryString(applied));
+
+    const applyFilters = () => {
+        setFiltersQuery(getFiltersQueryString({ tiers: tiersChecked, types: typesChecked, nations: nationsChecked }));
+    };
 
     useEffect(() => {
-        const query = new URLSearchParams();
-        if (tiersChecked.length) {
-            query.set('tiers', tiersChecked.join(','));
+        // prevent double push and push on initial render
+        if (filtersQuery === filtersQueryPrev) {
+            return;
         }
-        if (typesChecked.length) {
-            query.set('types', typesChecked.join(','));
-        }
-        if (nationsChecked.length) {
-            query.set('nations', nationsChecked.join(','));
-        }
-        router.push(`${pathname}?${query.toString()}`);
-    }, [tiersChecked, typesChecked, nationsChecked, pathname, router]);
+        // cleunup page query
+        router.push(`${pathname}?${filtersQuery.toString()}`);
+        setFiltersQueryPrev(filtersQuery);
+    }, [filtersQuery, pathname, router, filtersQueryPrev]);
+
+    const resetFilters = () => {
+        setNationsChecked([]);
+        setTypesChecked([]);
+        setTiersChecked([]);
+    };
+
+    // const [loading, setLoading] = useState(false);
+    // const handleApplyClick = () => {
+    //     applyFilters();
+    //     setLoading(true);
+    // };
+
+    // // eslint-disable-next-line react-hooks/exhaustive-deps
+    // const setFiltersQueryDebounced = useCallback(debounce(setFiltersQuery, 700), []);
+    // useEffect(() => {
+    //     setFiltersQueryDebounced(
+    //         getFiltersQueryString({ tiers: tiersChecked, types: typesChecked, nations: nationsChecked }),
+    //     );
+    // }, [tiersChecked, typesChecked, nationsChecked, setFiltersQueryDebounced]);
 
     return (
         <div className="flex flex-col gap-3">
-            <div className={twMerge('flex gap-10', className)}>
-                <Popover>
-                    <PopoverTrigger>Типы</PopoverTrigger>
-                    <PopoverContent className="flex flex-col gap-1 text-sm">
-                        {Object.entries(types).map(([key, { title, icon }]) => (
-                            <div key={key} className="grid grid-cols-[1.5rem_1fr_24px] items-center gap-2">
-                                <Checkbox
-                                    id={`type-${key}`}
-                                    checked={isTypeChecked(key)}
-                                    onCheckedChange={onTypeCheckedChange(key)}
-                                />
-                                <label htmlFor={`type-${key}`}>
-                                    <span>{title}</span>
-                                </label>
-                                <Image src={icon} alt={title} width={24} height={16} className="inline" />
-                            </div>
-                        ))}
-                    </PopoverContent>
-                </Popover>
-                <Popover>
-                    <PopoverTrigger>Нации</PopoverTrigger>
-                    <PopoverContent className="flex flex-col gap-1">
-                        {Object.entries(nations).map(([key, { title }]) => (
-                            <div key={key} className="grid grid-cols-[1.5rem_1fr_24px] items-center gap-2">
-                                <Checkbox
-                                    id={`nation-${key}`}
-                                    checked={isNationChecked(key)}
-                                    onCheckedChange={onNationCheckedChange(key)}
-                                />
-                                <label htmlFor={`nation-${key}`}>{title}</label>
-                                {flags[key] && (
-                                    <Image src={flags[key]!} alt={title} width={24} height={16} className="inline" />
-                                )}
-                            </div>
-                        ))}
-                    </PopoverContent>
-                </Popover>
-                <Popover>
-                    <PopoverTrigger>Уровни</PopoverTrigger>
-                    <PopoverContent className="flex flex-col gap-1">
-                        {Array.from({ length: 9 }, (_, i) => i + 2).map((tier) => (
-                            <div key={tier} className="grid grid-cols-[1.5rem_1fr_24px] items-center gap-2">
-                                <Checkbox
-                                    id={`tier-${tier}`.toString()}
-                                    checked={isTierChecked(tier.toString())}
-                                    onCheckedChange={onTierCheckedChange(tier.toString())}
-                                />
-                                <label htmlFor={`tier-${tier}`}>{roman(tier)}</label>
-                            </div>
-                        ))}
-                    </PopoverContent>
-                </Popover>
+            <div className={twMerge('flex gap-10', className)} key={JSON.stringify(applied)}>
+                <Filter
+                    checked={nationsChecked}
+                    setChecked={setNationsChecked}
+                    title="Нации"
+                    name="nations"
+                    options={Object.entries(nations).map(([key, { title }]) => ({
+                        optKey: key,
+                        optTitle: title,
+                        optIcon: flags[key],
+                    }))}
+                    applyFilters={applyFilters}
+                >
+                    применить
+                </Filter>
+                <Filter
+                    checked={typesChecked}
+                    setChecked={setTypesChecked}
+                    title="Типы"
+                    name="types"
+                    options={Object.entries(types).map(([key, { title, icon }]) => ({
+                        optKey: key,
+                        optTitle: title,
+                        optIcon: icon,
+                    }))}
+                    applyFilters={applyFilters}
+                >
+                    применить
+                </Filter>
+                <Filter
+                    checked={tiersChecked}
+                    setChecked={setTiersChecked}
+                    title="Уровни"
+                    name="tiers"
+                    options={Array.from({ length: 9 }, (_, i) => {
+                        const tier = i + 2;
+                        return {
+                            optKey: tier.toString(),
+                            optTitle: roman(tier) ?? tier.toString(),
+                        };
+                    })}
+                    applyFilters={applyFilters}
+                >
+                    43
+                </Filter>
             </div>
             <div className="flex min-h-6 flex-wrap gap-3 text-xs">
-                {nationsChecked.map(
-                    (key) =>
-                        nations[key] && (
-                            <Tag key={key} action={() => onNationCheckedChange(key)(false)} color={nations[key]?.color}>
-                                {nations[key]?.title}
-                            </Tag>
-                        ),
-                )}
-                {typesChecked.map(
-                    (key) =>
-                        types[key] && (
-                            <Tag key={key} action={() => onTypeCheckedChange(key)(false)}>
-                                {types[key]?.title}
-                            </Tag>
-                        ),
-                )}
-                {tiersChecked.map((tier) => (
-                    <Tag
-                        key={tier}
-                        action={() => onTierCheckedChange(tier)(false)}
-                        color={`#00${(parseInt(tier, 10) * 20).toString(16)}00`}
+                {nationsChecked.length !== 0 || typesChecked.length !== 0 || tiersChecked.length !== 0 ? (
+                    <button
+                        onClick={resetFilters}
+                        type="button"
+                        className="underline decoration-dashed underline-offset-2"
                     >
-                        {roman(Number(tier))}
-                    </Tag>
-                ))}
+                        Сбросить фильтры
+                    </button>
+                ) : null}
+                <Tags
+                    checked={nationsChecked.map((key) => ({
+                        key,
+                        title: nations[key]?.title ?? key,
+                        color: nations[key]?.color,
+                    }))}
+                    setChecked={setNationsChecked}
+                    applyFilters={applyFilters}
+                />
+                <Tags
+                    checked={typesChecked.map((key) => ({
+                        key,
+                        title: types[key]?.title ?? key,
+                    }))}
+                    setChecked={setTypesChecked}
+                    applyFilters={applyFilters}
+                />
+                <Tags
+                    checked={tiersChecked.map((tier) => ({
+                        key: tier,
+                        title: roman(tier) ?? tier.toString(),
+                        color: `#00${(parseInt(tier, 10) * 20).toString(16)}00`,
+                    }))}
+                    setChecked={setTiersChecked}
+                    applyFilters={applyFilters}
+                />
             </div>
         </div>
     );

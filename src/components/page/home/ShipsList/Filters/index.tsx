@@ -1,6 +1,5 @@
 'use client';
 
-import { Button } from '@/components/ui/button';
 import flags from '@/lib/flags';
 import roman from '@/lib/levels';
 import { usePathname, useRouter } from 'next/navigation';
@@ -8,8 +7,8 @@ import { useEffect, useState } from 'react';
 import { twMerge } from 'tailwind-merge';
 import type { Filters } from '../data/ships';
 import Filter from './Filter';
-import Tags from './Tags';
 import ResetTags from './ResetTags';
+import Tags from './Tags';
 
 type ShipsListFiltersProps = {
     className?: string;

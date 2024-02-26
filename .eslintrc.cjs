@@ -14,14 +14,11 @@ const config = {
         'prettier',
     ],
     rules: {
-        // These opinionated rules are enabled in stylistic-type-checked above.
-        // Feel free to reconfigure them to your own preference.
         indent: 'off',
         'no-plusplus': 'off',
         '@typescript-eslint/indent': 'off',
         '@typescript-eslint/array-type': 'off',
         '@typescript-eslint/consistent-type-definitions': 'off',
-
         '@typescript-eslint/consistent-type-imports': [
             'warn',
             {
@@ -30,7 +27,7 @@ const config = {
             },
         ],
         '@typescript-eslint/no-unused-vars': ['warn', { argsIgnorePattern: '^_' }],
-        '@typescript-eslint/require-await': 'off',
+        // '@typescript-eslint/require-await': 'off',
         '@typescript-eslint/no-misused-promises': [
             'error',
             {
@@ -42,6 +39,24 @@ const config = {
             {
                 forbidDefaultForRequired: true,
                 functions: 'defaultArguments',
+            },
+        ],
+        'no-restricted-syntax': [
+            'error',
+            {
+                selector: 'ForInStatement',
+                message:
+                    'for..in loops iterate over the entire prototype chain, which is virtually never what you want. Use Object.{keys,values,entries}, and iterate over the resulting array.',
+            },
+            {
+                selector: 'LabeledStatement',
+                message:
+                    'Labels are a form of GOTO; using them makes code confusing and hard to maintain and understand.',
+            },
+            {
+                selector: 'WithStatement',
+                message:
+                    '`with` is disallowed in strict mode because it makes code impossible to predict and optimize.',
             },
         ],
     },

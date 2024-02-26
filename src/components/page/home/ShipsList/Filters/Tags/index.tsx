@@ -15,7 +15,7 @@ export default function Tags({ checked, setChecked, applyFilters }: TagsProps) {
             setTrigger(false);
             applyFilters();
         }
-    }, [checked, applyFilters, trigger]);
+    }, [applyFilters, trigger]);
     return (
         <>
             {checked.map(({ key, title, color }) => (

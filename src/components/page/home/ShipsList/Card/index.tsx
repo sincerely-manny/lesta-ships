@@ -63,6 +63,8 @@ export default function Card({ data: { id, image, title, level, type, nation } }
                     width={400}
                     height={300}
                     key={id}
+                    // placeholder="blur"
+                    // blurDataURL="/image/placeholder.png"
                 />
             </div>
 

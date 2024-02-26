@@ -9,6 +9,7 @@ import { twMerge } from 'tailwind-merge';
 import type { Filters } from '../data/ships';
 import Filter from './Filter';
 import Tags from './Tags';
+import ResetTags from './ResetTags';
 
 type ShipsListFiltersProps = {
     className?: string;
@@ -31,14 +32,6 @@ function getFiltersQueryString({ tiers, types, nations }: Filters) {
         query.set('nations', nations.join(','));
     }
     return query.toString();
-}
-
-function ApplyButton({ onClick }: { onClick: () => void }) {
-    return (
-        <Button onClick={onClick} className="mt-4 opacity-80" size="xs">
-            Применить
-        </Button>
-    );
 }
 
 export default function ShipsListFilters({ className = '', data: { types, nations, applied } }: ShipsListFiltersProps) {
@@ -66,26 +59,6 @@ export default function ShipsListFilters({ className = '', data: { types, nation
         setFiltersQueryPrev(filtersQuery);
     }, [filtersQuery, pathname, router, filtersQueryPrev]);
 
-    const resetFilters = () => {
-        setNationsChecked([]);
-        setTypesChecked([]);
-        setTiersChecked([]);
-    };
-
-    // const [loading, setLoading] = useState(false);
-    // const handleApplyClick = () => {
-    //     applyFilters();
-    //     setLoading(true);
-    // };
-
-    // // eslint-disable-next-line react-hooks/exhaustive-deps
-    // const setFiltersQueryDebounced = useCallback(debounce(setFiltersQuery, 700), []);
-    // useEffect(() => {
-    //     setFiltersQueryDebounced(
-    //         getFiltersQueryString({ tiers: tiersChecked, types: typesChecked, nations: nationsChecked }),
-    //     );
-    // }, [tiersChecked, typesChecked, nationsChecked, setFiltersQueryDebounced]);
-
     return (
         <div className="flex flex-col gap-3">
             <div className={twMerge('flex gap-10', className)} key={JSON.stringify(applied)}>
@@ -100,9 +73,7 @@ export default function ShipsListFilters({ className = '', data: { types, nation
                         optIcon: flags[key],
                     }))}
                     applyFilters={applyFilters}
-                >
-                    применить
-                </Filter>
+                />
                 <Filter
                     checked={typesChecked}
                     setChecked={setTypesChecked}
@@ -114,9 +85,7 @@ export default function ShipsListFilters({ className = '', data: { types, nation
                         optIcon: icon,
                     }))}
                     applyFilters={applyFilters}
-                >
-                    применить
-                </Filter>
+                />
                 <Filter
                     checked={tiersChecked}
                     setChecked={setTiersChecked}
@@ -130,20 +99,14 @@ export default function ShipsListFilters({ className = '', data: { types, nation
                         };
                     })}
                     applyFilters={applyFilters}
-                >
-                    43
-                </Filter>
+                />
             </div>
             <div className="flex min-h-6 flex-wrap gap-3 text-xs">
-                {nationsChecked.length !== 0 || typesChecked.length !== 0 || tiersChecked.length !== 0 ? (
-                    <button
-                        onClick={resetFilters}
-                        type="button"
-                        className="underline decoration-dashed underline-offset-2"
-                    >
-                        Сбросить фильтры
-                    </button>
-                ) : null}
+                <ResetTags
+                    setters={[setTypesChecked, setTiersChecked, setNationsChecked]}
+                    applyFilters={applyFilters}
+                    show={nationsChecked.length !== 0 || typesChecked.length !== 0 || tiersChecked.length !== 0}
+                />
                 <Tags
                     checked={nationsChecked.map((key) => ({
                         key,

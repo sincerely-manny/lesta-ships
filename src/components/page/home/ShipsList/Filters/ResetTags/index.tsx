@@ -1,3 +1,4 @@
+import { FilterX } from 'lucide-react';
 import { useEffect, type Dispatch, type SetStateAction, useState } from 'react';
 
 type ResetTagsProps = {
@@ -21,8 +22,9 @@ export default function ResetTags({ setters, applyFilters, show }: ResetTagsProp
         }
     }, [applyFilters, trigger]);
     return show ? (
-        <button onClick={resetFilters} type="button" className="underline decoration-dashed underline-offset-2">
-            Сбросить фильтры
+        <button onClick={resetFilters} type="button">
+            <FilterX size={13} className="inline" />{' '}
+            <span className="underline decoration-dashed underline-offset-4">Очистить&nbsp;</span>
         </button>
     ) : null;
 }

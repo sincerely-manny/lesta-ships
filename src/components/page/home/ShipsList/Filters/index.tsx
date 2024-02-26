@@ -2,6 +2,7 @@
 
 import flags from '@/lib/flags';
 import roman from '@/lib/levels';
+import { Loader2 } from 'lucide-react';
 import { usePathname, useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { twMerge } from 'tailwind-merge';
@@ -9,6 +10,7 @@ import type { Filters } from '../data/ships';
 import Filter from './Filter';
 import ResetTags from './ResetTags';
 import Tags from './Tags';
+import TextSearch from './TextSearch';
 
 type ShipsListFiltersProps = {
     className?: string;
@@ -19,7 +21,7 @@ type ShipsListFiltersProps = {
     };
 };
 
-function getFiltersQueryString({ tiers, types, nations }: Filters) {
+function getFiltersQueryString({ tiers, types, nations, search }: Filters) {
     const query = new URLSearchParams();
     if (tiers?.length) {
         query.set('tiers', tiers.join(','));
@@ -29,6 +31,10 @@ function getFiltersQueryString({ tiers, types, nations }: Filters) {
     }
     if (nations?.length) {
         query.set('nations', nations.join(','));
+    }
+    const searchTrimmed = search?.trim();
+    if (searchTrimmed?.length) {
+        query.set('search', searchTrimmed);
     }
     return query.toString();
 }
@@ -41,11 +47,22 @@ export default function ShipsListFilters({ className = '', data: { types, nation
     const [typesChecked, setTypesChecked] = useState(applied.types ?? []);
     const [tiersChecked, setTiersChecked] = useState(applied.tiers ?? []);
 
+    const [searchText, setSearchText] = useState(applied.search ?? '');
+
     const [filtersQuery, setFiltersQuery] = useState(getFiltersQueryString(applied));
     const [filtersQueryPrev, setFiltersQueryPrev] = useState(getFiltersQueryString(applied));
 
+    const [isLoading, setIsLoading] = useState(false);
+
     const applyFilters = () => {
-        setFiltersQuery(getFiltersQueryString({ tiers: tiersChecked, types: typesChecked, nations: nationsChecked }));
+        setFiltersQuery(
+            getFiltersQueryString({
+                tiers: tiersChecked,
+                types: typesChecked,
+                nations: nationsChecked,
+                search: searchText,
+            }),
+        );
     };
 
     useEffect(() => {
@@ -53,14 +70,25 @@ export default function ShipsListFilters({ className = '', data: { types, nation
         if (filtersQuery === filtersQueryPrev) {
             return;
         }
+        setIsLoading(true);
         // cleunup page query
         router.push(`${pathname}?${filtersQuery.toString()}`);
         setFiltersQueryPrev(filtersQuery);
     }, [filtersQuery, pathname, router, filtersQueryPrev]);
+    useEffect(() => {
+        setIsLoading(false);
+    }, [applied]);
 
     return (
-        <div className="flex flex-col gap-3">
-            <div className={twMerge('flex gap-10', className)} key={JSON.stringify(applied)}>
+        <div className="flex w-full flex-col gap-3">
+            <div
+                className={twMerge(
+                    'flex w-full flex-col flex-wrap items-center justify-start gap-5 md:flex-row',
+                    className,
+                )}
+                // key={JSON.stringify(applied)}
+            >
+                <TextSearch value={searchText} setValue={setSearchText} applyFilters={applyFilters} />
                 <Filter
                     checked={nationsChecked}
                     setChecked={setNationsChecked}
@@ -132,6 +160,7 @@ export default function ShipsListFilters({ className = '', data: { types, nation
                     setChecked={setTiersChecked}
                     applyFilters={applyFilters}
                 />
+                {isLoading && <Loader2 className="h-6 w-6 animate-spin opacity-80" />}
             </div>
         </div>
     );

@@ -69,6 +69,7 @@ export type Filters = {
     types?: string[];
     nations?: string[];
     tiers?: string[];
+    search?: string;
 };
 
 export const getShipsFiltered = (data: Vehicles, filters: Filters) => {
@@ -80,7 +81,11 @@ export const getShipsFiltered = (data: Vehicles, filters: Filters) => {
         const nation =
             !filters.nations || filters.nations.length === 0 || filters.nations.includes(v?.nation?.name ?? '');
         const tier = !filters.tiers || filters.tiers.length === 0 || filters.tiers.includes(v?.level?.toString() ?? '');
-        return type && nation && tier;
+        const title =
+            !filters.search ||
+            filters.search.length === 0 ||
+            (v?.title as string).toUpperCase().includes(filters.search.toUpperCase());
+        return type && nation && tier && title;
     });
     return { data: fitlered, error: null };
 };

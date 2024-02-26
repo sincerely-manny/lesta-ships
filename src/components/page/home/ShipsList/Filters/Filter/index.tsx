@@ -33,7 +33,7 @@ export default function Filter({
     return (
         <Popover onOpenChange={handleOpenChange}>
             <PopoverTrigger asChild>
-                <Button variant="secondary" className="group flex w-72 justify-between">
+                <Button variant="secondary" size="sm" className="group flex w-full justify-between md:w-72">
                     <span>{title}</span>
                     <ChevronDown size={20} className="group-data-[state=open]:rotate-180" />
                 </Button>

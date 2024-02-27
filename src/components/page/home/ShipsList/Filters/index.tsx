@@ -94,7 +94,7 @@ export default function ShipsListFilters({
 
     return (
         <div className={twMerge('flex w-full flex-col gap-3', className)}>
-            <div className="flex w-full flex-col flex-wrap items-center justify-start gap-5 md:flex-row">
+            <div className="flex w-full flex-col flex-wrap items-center justify-start gap-2 md:flex-row md:gap-5">
                 <TextSearch
                     value={searchText}
                     setValue={setSearchText}
@@ -102,7 +102,7 @@ export default function ShipsListFilters({
                     className={filterClassName}
                 />
                 <Sorting
-                    className="w-[400px] md:w-40"
+                    className="w-[400px] md:w-36"
                     sorted={selectedSort}
                     setSorted={setSelectedSort}
                     applyFilters={applyFilters}

@@ -39,7 +39,7 @@ export default async function ShipsList({ limit = 24, page = 1, filters, sort }:
     return (
         <section className="relative flex w-full flex-col items-center">
             <ShipsListFilters data={{ types, nations, applied: filters ?? {}, sort }} className="mb-3" />
-            <ul className="grid items-stretch gap-3 transition-all md:grid-cols-2 lg:grid-cols-3 lg:gap-4 xl:grid-cols-4 xl:gap-6">
+            <ul className="grid max-w-fit items-stretch gap-3 md:grid-cols-2 lg:grid-cols-3 lg:gap-4 xl:grid-cols-4 xl:gap-6">
                 {data?.map((v) => (
                     <Card
                         key={v?.id}

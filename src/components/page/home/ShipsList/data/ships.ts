@@ -98,23 +98,65 @@ export const getShipsPaginated = ({ ships, limit, offset }: { ships: Vehicles; l
     return { data: slice, error: null };
 };
 
-export const sortShips = (data: Vehicles, sort = 'tier') => {
+export const sortShips = (data: Vehicles, sortBy = 'tier') => {
     if (!data) {
         return {
             data: null,
             error: { message: 'Unknown error sorting ships' },
         };
     }
-    const sorted = data.sort((a, b) => {
-        switch (sort) {
+
+    const compare = <T extends string | number>(a: T, b: T) => {
+        if (typeof a === 'string' && typeof b === 'string') {
+            return a.localeCompare(b);
+        }
+        if (typeof a === 'number' && typeof b === 'number') {
+            return a - b;
+        }
+        return 0;
+    };
+
+    const sorted = data.sort((ship1, ship2) => {
+        const [level1, level2, type1, type2, nation1, nation2, name1, name2] = [
+            ship1?.level ?? 0,
+            ship2?.level ?? 0,
+            (ship1?.type?.title as string) ?? '',
+            (ship2?.type?.title as string) ?? '',
+            (ship1?.nation?.title as string) ?? '',
+            (ship2?.nation?.title as string) ?? '',
+            (ship1?.title as string) ?? '',
+            (ship2?.title as string) ?? '',
+        ];
+        switch (sortBy) {
             case 'tier':
-                return (a?.level ?? 0) - (b?.level ?? 0);
+                return (
+                    compare(level1, level2) ||
+                    compare(type1, type2) ||
+                    compare(nation1, nation2) ||
+                    compare(name1, name2)
+                );
             case 'type':
-                return ((a?.type?.title as string) ?? '').localeCompare((b?.type?.title as string) ?? '');
+                return (
+                    compare(type1, type2) ||
+                    compare(level1, level2) ||
+                    compare(nation1, nation2) ||
+                    compare(name1, name2)
+                );
             case 'nation':
-                return ((a?.nation?.title as string) ?? '').localeCompare((b?.nation?.title as string) ?? '');
+                return (
+                    compare(nation1, nation2) ||
+                    compare(level1, level2) ||
+                    compare(type1, type2) ||
+                    compare(name1, name2)
+                );
             case 'name':
-                return ((a?.title as string) ?? '').localeCompare((b?.title as string) ?? '');
+                return (
+                    compare(name1, name2) ||
+                    compare(level1, level2) ||
+                    compare(type1, type2) ||
+                    compare(nation1, nation2)
+                );
+            case 'default':
             default:
                 return 0;
         }

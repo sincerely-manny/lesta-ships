@@ -1,11 +1,16 @@
 import { Button } from '@/components/ui/button';
+import Label from '@/components/ui/label';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
+import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { ChevronDown, SortDesc } from 'lucide-react';
-import { useRef, useState } from 'react';
+import { type Dispatch, useEffect, useRef, useState, type SetStateAction } from 'react';
 import { twMerge } from 'tailwind-merge';
 
 type SortingProps = {
     className?: string;
+    sorted: string;
+    setSorted: Dispatch<SetStateAction<string>>;
+    applyFilters: () => void;
 };
 
 const sortingOptions = [
@@ -15,8 +20,9 @@ const sortingOptions = [
     { label: 'По имени', value: 'name' },
 ] as const;
 
-export default function Sorting({ className = '' }: SortingProps) {
+export default function Sorting({ className = '', sorted, setSorted, applyFilters }: SortingProps) {
     const [open, setOpen] = useState(false);
+    const [trigger, setTrigger] = useState(false);
 
     const buttonRef = useRef<HTMLButtonElement>(null);
     const [popoverWidth, setPopoverWidth] = useState('0px');
@@ -24,8 +30,19 @@ export default function Sorting({ className = '' }: SortingProps) {
     const handleOpenChange = (o: boolean) => {
         setOpen(o);
         setPopoverWidth(`${buttonRef.current?.offsetWidth}px` ?? '0px');
-        // if (!open) applyFilters();
     };
+
+    const handleValueChange = (value: string) => {
+        setSorted(value);
+        setTrigger(true);
+    };
+
+    useEffect(() => {
+        if (trigger) {
+            applyFilters();
+            setTrigger(false);
+        }
+    }, [trigger, applyFilters]);
     return (
         <div>
             <Popover onOpenChange={handleOpenChange} open={open}>
@@ -40,7 +57,7 @@ export default function Sorting({ className = '' }: SortingProps) {
                         <span>
                             <SortDesc className="mr-1 inline" size={16} />
                             <span className="sr-only">Сортировать:</span>
-                            Sort
+                            {sortingOptions.find((option) => option.value === sorted)?.label ?? 'Сортировка'}
                         </span>
                         <ChevronDown size={20} className="group-data-[state=open]:rotate-180" />
                     </Button>
@@ -50,7 +67,14 @@ export default function Sorting({ className = '' }: SortingProps) {
                     style={{ minWidth: popoverWidth }}
                     onEscapeKeyDown={() => buttonRef.current?.focus()}
                 >
-                    1
+                    <RadioGroup defaultValue={sorted} value={sorted} onValueChange={handleValueChange}>
+                        {sortingOptions.map((option) => (
+                            <div className="flex items-center space-x-2" key={option.value}>
+                                <RadioGroupItem value={option.value} id={`sortby-${option.value}`} tabIndex={0} />
+                                <Label htmlFor={`sortby-${option.value}`}>{option.label}</Label>
+                            </div>
+                        ))}
+                    </RadioGroup>
                 </PopoverContent>
             </Popover>
         </div>

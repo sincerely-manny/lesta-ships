@@ -19,10 +19,11 @@ type ShipsListFiltersProps = {
         types: Record<string, { title: string; icon: string }>;
         nations: Record<string, { title: string; color: string }>;
         applied: Filters;
+        sort: string;
     };
 };
 
-function getFiltersQueryString({ tiers, types, nations, search }: Filters) {
+function getQueryString({ tiers, types, nations, search, sort }: Filters & { sort?: string }) {
     const query = new URLSearchParams();
     if (tiers?.length) {
         query.set('tiers', tiers.join(','));
@@ -37,10 +38,16 @@ function getFiltersQueryString({ tiers, types, nations, search }: Filters) {
     if (searchTrimmed?.length) {
         query.set('search', searchTrimmed);
     }
+    if (sort) {
+        query.set('sort', sort);
+    }
     return query.toString();
 }
 
-export default function ShipsListFilters({ className = '', data: { types, nations, applied } }: ShipsListFiltersProps) {
+export default function ShipsListFilters({
+    className = '',
+    data: { types, nations, applied, sort },
+}: ShipsListFiltersProps) {
     const router = useRouter();
     const pathname = usePathname();
 
@@ -50,18 +57,21 @@ export default function ShipsListFilters({ className = '', data: { types, nation
 
     const [searchText, setSearchText] = useState(applied.search ?? '');
 
-    const [filtersQuery, setFiltersQuery] = useState(getFiltersQueryString(applied));
-    const [filtersQueryPrev, setFiltersQueryPrev] = useState(getFiltersQueryString(applied));
+    const [selectedSort, setSelectedSort] = useState(sort);
+
+    const [filtersQuery, setFiltersQuery] = useState(getQueryString(applied));
+    const [filtersQueryPrev, setFiltersQueryPrev] = useState(getQueryString(applied));
 
     const [isLoading, setIsLoading] = useState(false);
 
     const applyFilters = () => {
         setFiltersQuery(
-            getFiltersQueryString({
+            getQueryString({
                 tiers: tiersChecked,
                 types: typesChecked,
                 nations: nationsChecked,
                 search: searchText,
+                sort: selectedSort,
             }),
         );
     };
@@ -91,7 +101,12 @@ export default function ShipsListFilters({ className = '', data: { types, nation
                     applyFilters={applyFilters}
                     className={filterClassName}
                 />
-                <Sorting className={filterClassName} />
+                <Sorting
+                    className="w-[400px] md:w-40"
+                    sorted={selectedSort}
+                    setSorted={setSelectedSort}
+                    applyFilters={applyFilters}
+                />
                 <Filter
                     checked={nationsChecked}
                     setChecked={setNationsChecked}

@@ -15,10 +15,10 @@ type ShipsListProps = {
     limit?: number;
     page?: number;
     filters?: Filters;
-    sort?: string;
+    sort: string;
 };
 
-export default async function ShipsList({ limit = 24, page = 1, filters, sort = 'tier' }: ShipsListProps) {
+export default async function ShipsList({ limit = 24, page = 1, filters, sort }: ShipsListProps) {
     const offset = (page - 1) * limit;
     const {
         data: { vehicles: allShips },
@@ -38,7 +38,7 @@ export default async function ShipsList({ limit = 24, page = 1, filters, sort = 
     const { data } = getShipsPaginated({ limit, offset, ships: sorted });
     return (
         <section className="relative flex w-full flex-col items-center">
-            <ShipsListFilters data={{ types, nations, applied: filters ?? {} }} className="mb-3" />
+            <ShipsListFilters data={{ types, nations, applied: filters ?? {}, sort }} className="mb-3" />
             <ul className="grid items-stretch gap-3 transition-all md:grid-cols-2 lg:grid-cols-3 lg:gap-4 xl:grid-cols-4 xl:gap-6">
                 {data?.map((v) => (
                     <Card

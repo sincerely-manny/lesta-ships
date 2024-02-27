@@ -97,3 +97,27 @@ export const getShipsPaginated = ({ ships, limit, offset }: { ships: Vehicles; l
     const slice = ships.slice(offset, offset + limit);
     return { data: slice, error: null };
 };
+
+export const sortShips = (data: Vehicles, sort = 'tier') => {
+    if (!data) {
+        return {
+            data: null,
+            error: { message: 'Unknown error sorting ships' },
+        };
+    }
+    const sorted = data.sort((a, b) => {
+        switch (sort) {
+            case 'tier':
+                return (a?.level ?? 0) - (b?.level ?? 0);
+            case 'type':
+                return ((a?.type?.title as string) ?? '').localeCompare((b?.type?.title as string) ?? '');
+            case 'nation':
+                return ((a?.nation?.title as string) ?? '').localeCompare((b?.nation?.title as string) ?? '');
+            case 'name':
+                return ((a?.title as string) ?? '').localeCompare((b?.title as string) ?? '');
+            default:
+                return 0;
+        }
+    });
+    return { data: sorted, error: null };
+};

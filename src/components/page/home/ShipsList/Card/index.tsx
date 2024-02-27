@@ -33,7 +33,7 @@ export default function Card({ data: { id, image, title, level, type, nation } }
             <div className="w-[90%] place-self-center [grid-area:stack]" aria-hidden>
                 <Image
                     src={nation.icon}
-                    alt={title}
+                    alt={nation.title}
                     className="h-auto max-w-full object-cover opacity-10 transition-opacity duration-500 group-hover:opacity-20"
                     width={400}
                     height={300}
@@ -79,7 +79,7 @@ export default function Card({ data: { id, image, title, level, type, nation } }
                             </span>
                         </div>
                     </div>
-                    <div className="text-right">
+                    <div className="whitespace-nowrap text-right">
                         <p className="text-xs font-light opacity-70">
                             {type.title} – Уровень {roman(level)}
                         </p>

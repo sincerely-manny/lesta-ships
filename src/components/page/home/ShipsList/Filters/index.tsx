@@ -11,6 +11,7 @@ import Filter from './Filter';
 import ResetTags from './ResetTags';
 import Tags from './Tags';
 import TextSearch from './TextSearch';
+import Sorting from './Sorting';
 
 type ShipsListFiltersProps = {
     className?: string;
@@ -79,16 +80,18 @@ export default function ShipsListFilters({ className = '', data: { types, nation
         setIsLoading(false);
     }, [applied]);
 
+    const filterClassName = 'w-[400px] md:w-auto';
+
     return (
-        <div className="flex w-full flex-col gap-3">
-            <div
-                className={twMerge(
-                    'flex w-full flex-col flex-wrap items-center justify-start gap-5 md:flex-row',
-                    className,
-                )}
-                // key={JSON.stringify(applied)}
-            >
-                <TextSearch value={searchText} setValue={setSearchText} applyFilters={applyFilters} />
+        <div className={twMerge('flex w-full flex-col gap-3', className)}>
+            <div className="flex w-full flex-col flex-wrap items-center justify-start gap-5 md:flex-row">
+                <TextSearch
+                    value={searchText}
+                    setValue={setSearchText}
+                    applyFilters={applyFilters}
+                    className={filterClassName}
+                />
+                <Sorting className={filterClassName} />
                 <Filter
                     checked={nationsChecked}
                     setChecked={setNationsChecked}
@@ -100,6 +103,7 @@ export default function ShipsListFilters({ className = '', data: { types, nation
                         optIcon: flags[key],
                     }))}
                     applyFilters={applyFilters}
+                    className={filterClassName}
                 />
                 <Filter
                     checked={typesChecked}
@@ -112,6 +116,7 @@ export default function ShipsListFilters({ className = '', data: { types, nation
                         optIcon: icon,
                     }))}
                     applyFilters={applyFilters}
+                    className={filterClassName}
                 />
                 <Filter
                     checked={tiersChecked}
@@ -126,6 +131,7 @@ export default function ShipsListFilters({ className = '', data: { types, nation
                         };
                     })}
                     applyFilters={applyFilters}
+                    className={filterClassName}
                 />
             </div>
             <div className="flex min-h-6 flex-wrap gap-3 text-xs">

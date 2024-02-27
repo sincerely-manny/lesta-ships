@@ -1,15 +1,24 @@
 import Card from './Card';
 import ShipsListPagination from './Pagination';
 import ShipsListFilters from './Filters';
-import { type Filters, getAllShips, getNations, getShipsFiltered, getShipsPaginated, getTypes } from './data/ships';
+import {
+    type Filters,
+    getAllShips,
+    getNations,
+    getShipsFiltered,
+    getShipsPaginated,
+    getTypes,
+    sortShips,
+} from './data/ships';
 
 type ShipsListProps = {
     limit?: number;
     page?: number;
     filters?: Filters;
+    sort?: string;
 };
 
-export default async function ShipsList({ limit = 24, page = 1, filters }: ShipsListProps) {
+export default async function ShipsList({ limit = 24, page = 1, filters, sort = 'tier' }: ShipsListProps) {
     const offset = (page - 1) * limit;
     const {
         data: { vehicles: allShips },
@@ -25,13 +34,11 @@ export default async function ShipsList({ limit = 24, page = 1, filters }: Ships
     }
     const filtered = getShipsFiltered(allShips, filters ?? {}).data;
     const total = filtered?.length ?? 0;
-    const { data } = getShipsPaginated({ limit, offset, ships: filtered });
+    const sorted = sortShips(filtered, sort).data;
+    const { data } = getShipsPaginated({ limit, offset, ships: sorted });
     return (
         <section className="relative flex w-full flex-col items-center">
-            <div className="mb-10 flex w-full justify-between">
-                <ShipsListFilters data={{ types, nations, applied: filters ?? {} }} />
-                <div />
-            </div>
+            <ShipsListFilters data={{ types, nations, applied: filters ?? {} }} className="mb-3" />
             <ul className="grid items-stretch gap-3 transition-all md:grid-cols-2 lg:grid-cols-3 lg:gap-4 xl:grid-cols-4 xl:gap-6">
                 {data?.map((v) => (
                     <Card

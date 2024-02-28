@@ -76,6 +76,7 @@ function PaginationPrevious({ className, ...props }: React.ComponentProps<typeof
             {...props}
         >
             <ChevronLeft className="h-6 w-6" />
+            <span className="sr-only">Предыдущая страница</span>
         </PaginationLink>
     );
 }
@@ -91,6 +92,7 @@ function PaginationNext({ className, ...props }: React.ComponentProps<typeof Pag
             {...props}
         >
             <ChevronRight className="h-6 w-6" />
+            <span className="sr-only">Следующая страница</span>
         </PaginationLink>
     );
 }

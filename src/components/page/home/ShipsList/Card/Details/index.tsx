@@ -80,7 +80,11 @@ export default async function Details({ data: { imageLarge, nation, title, level
                                 className="bg-primary/10 outline-primary/30  relative h-3 overflow-hidden rounded  outline outline-1 -outline-offset-1"
                                 style={{ width: `${t.value}%` }}
                             >
-                                <div className="from-secondary-1/50 absolute inset-0 w-[10rem] bg-gradient-to-l via-60% to-transparent" />
+                                <div className="from-secondary-1/50 absolute inset-0 grid w-[10rem] grid-cols-10 items-stretch bg-gradient-to-l via-60% to-transparent">
+                                    {Array.from({ length: 9 }, (_, i) => (
+                                        <div key={i} className="border-primary/20 border-r" />
+                                    ))}
+                                </div>
                             </div>
                         </Fragment>
                     ))}

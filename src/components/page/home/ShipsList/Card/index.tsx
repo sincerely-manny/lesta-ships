@@ -31,13 +31,7 @@ export default function Card({ data }: { data: ShipData }) {
     const { id, image, title, level, type, nation } = data;
     return (
         <li className="group relative grid aspect-[16/9] overflow-hidden [grid-template-areas:stack]">
-            {/* <Link className="absolute inset-0 z-10" href={`/ship/${id}`}>
-
-            </Link> */}
-            <DetailedView
-                // data={{ id, image, title, level, type, nation }}
-                className="absolute inset-0 z-10"
-            >
+            <DetailedView className="absolute inset-0 z-10" shipId={id}>
                 <Suspense fallback={<div>Загружаем описание...</div>}>
                     {/* TODO: Details skeleton */}
                     <Details data={data} />

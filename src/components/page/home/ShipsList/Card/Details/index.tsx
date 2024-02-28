@@ -4,9 +4,20 @@ import { Info } from 'lucide-react';
 import Image from 'next/image';
 import { Fragment } from 'react';
 import { type ShipData } from '..';
+import getShipById from './data/ship';
 
-export default function Details({ data }: { data: ShipData }) {
-    const { imageLarge, nation, title, description, level, type, ttc } = data;
+export type TtcData = {
+    description?: string;
+    name?: string;
+    title?: string;
+    unit?: string;
+    value?: number;
+};
+
+export default async function Details({ data: { imageLarge, nation, title, level, type, id } }: { data: ShipData }) {
+    const shipDetails = (await getShipById(id))?.data?.vehicles?.[0];
+    const description = (shipDetails?.description as string) ?? '';
+    const ttc = (shipDetails?.ttc as TtcData[]) ?? [];
     return (
         <div className="relative grid grid-cols-1 items-center gap-20 xl:grid-cols-2">
             <div className="aspect-[16/9] w-full max-w-[600px] xl:max-w-max">

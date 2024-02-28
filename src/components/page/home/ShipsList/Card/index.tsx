@@ -17,14 +17,6 @@ type ShipNationData = {
     color: string;
 };
 
-export type TtcData = {
-    description?: string;
-    name?: string;
-    title?: string;
-    unit?: string;
-    value?: number;
-};
-
 export type ShipData = {
     id: string;
     title: string;
@@ -32,9 +24,7 @@ export type ShipData = {
     image: string;
     type: ShipTypeData;
     nation: ShipNationData;
-    description: string;
     imageLarge: string;
-    ttc: TtcData[];
 };
 
 export default function Card({ data }: { data: ShipData }) {
@@ -48,7 +38,8 @@ export default function Card({ data }: { data: ShipData }) {
                 // data={{ id, image, title, level, type, nation }}
                 className="absolute inset-0 z-10"
             >
-                <Suspense fallback={<div>Загрузка...</div>}>
+                <Suspense fallback={<div>Загружаем описание...</div>}>
+                    {/* TODO: Details skeleton */}
                     <Details data={data} />
                 </Suspense>
             </DetailedView>

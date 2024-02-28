@@ -149,7 +149,7 @@ export default function ShipsListFilters({
                     className={filterClassName}
                 />
             </div>
-            <div className="flex min-h-6 flex-wrap gap-3 text-xs">
+            <div className="mx-auto flex min-h-6 w-[400px] flex-wrap gap-3 text-xs md:w-full">
                 <ResetTags
                     setters={[setTypesChecked, setTiersChecked, setNationsChecked]}
                     applyFilters={applyFilters}

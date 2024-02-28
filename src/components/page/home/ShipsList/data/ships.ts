@@ -9,7 +9,6 @@ const allShipsQuery = gql(`query AllShipsQuery {
     id
     title
     titleShort
-    description
     icons {
       large
       medium
@@ -35,17 +34,9 @@ const allShipsQuery = gql(`query AllShipsQuery {
     isClan
     isPremium
     isSpecial
-    ttc {
-        description
-        name
-        title
-        unit
-        value
-    }
   }
 }
 `);
-// TODO: separate query for description and ttc
 
 export const getAllShips = async () => {
     const { data, error } = await getClient().query({ query: allShipsQuery });

@@ -36,7 +36,7 @@ export default function DetailedView({ className = '', children = null, shipId }
             </DrawerTrigger>
             <DrawerContent className="max-h-[90%]">
                 <div className="h-full w-full overflow-y-auto overflow-x-clip">
-                    <div className="container mx-auto overflow-hidden py-40">{children}</div>
+                    <div className="container mx-auto overflow-hidden py-10">{children}</div>
                 </div>
                 <DrawerFooter>
                     <DrawerClose asChild>

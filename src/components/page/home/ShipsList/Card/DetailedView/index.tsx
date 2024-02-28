@@ -40,7 +40,7 @@ export default function DetailedView({ className = '', children = null, shipId }
                 </div>
                 <DrawerFooter>
                     <DrawerClose asChild>
-                        <Button className="hidden md:block">
+                        <Button className="hidden md:flex">
                             <ArrowLeft size={16} className="mr-2" /> Назад
                         </Button>
                     </DrawerClose>

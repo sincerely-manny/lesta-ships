@@ -1,4 +1,5 @@
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
+import cache from '@/lib/cache';
 import roman from '@/lib/levels';
 import { Info } from 'lucide-react';
 import Image from 'next/image';
@@ -15,7 +16,8 @@ export type TtcData = {
 };
 
 export default async function Details({ data: { imageLarge, nation, title, level, type, id } }: { data: ShipData }) {
-    const shipDetails = (await getShipById(id))?.data?.vehicles?.[0];
+    const getShipByIdCached = cache(getShipById);
+    const shipDetails = (await getShipByIdCached(id))?.data?.vehicles?.[0];
     const description = (shipDetails?.description as string) ?? '';
     const ttc = (shipDetails?.ttc as TtcData[]) ?? [];
     return (

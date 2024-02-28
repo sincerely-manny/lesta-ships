@@ -3,6 +3,7 @@
 import 'server-only';
 import getClient from '@/lib/apollo-client';
 import { gql } from '@/lib/gql/gql';
+import cache from '@/lib/cache';
 
 const byIdQuery = gql(`query ByIdQuery($vehicleId: String) {
     vehicles(lang: "ru", vehicleId: $vehicleId, ) {

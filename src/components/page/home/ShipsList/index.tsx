@@ -1,14 +1,15 @@
+import cache from '@/lib/cache';
 import Card from './Card';
-import ShipsListPagination from './Pagination';
 import ShipsListFilters from './Filters';
+import ShipsListPagination from './Pagination';
 import {
-    type Filters,
     getAllShips,
     getNations,
     getShipsFiltered,
     getShipsPaginated,
     getTypes,
     sortShips,
+    type Filters,
 } from './data/ships';
 
 type ShipsListProps = {
@@ -20,13 +21,15 @@ type ShipsListProps = {
 
 export default async function ShipsList({ limit = 24, page = 1, filters, sort }: ShipsListProps) {
     const offset = (page - 1) * limit;
+    const getAllShipsCached = cache(getAllShips);
     const {
         data: { vehicles: allShips },
         error,
-    } = await getAllShips();
+    } = await getAllShipsCached();
     if (error) {
         return <div>Error loading data: {error.message}</div>;
     }
+
     const types = getTypes(allShips).data;
     const nations = getNations(allShips).data;
     if (!types || !nations) {

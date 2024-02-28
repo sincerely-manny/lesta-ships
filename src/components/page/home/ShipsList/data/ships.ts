@@ -1,10 +1,14 @@
+'use server';
+
+import 'server-only';
 import getClient from '@/lib/apollo-client';
 import { gql } from '@/lib/gql/gql';
 
-const allShipsQuery = gql(`query ExampleQuery {
-  vehicles(lang: "ru", isCatalogue: true) {
+const allShipsQuery = gql(`query AllShipsQuery {
+  vehicles(lang: "ru", isCatalogue: false) {
     id
     title
+    titleShort
     description
     icons {
       large
@@ -28,9 +32,20 @@ const allShipsQuery = gql(`query ExampleQuery {
         large
       }
     }
+    isClan
+    isPremium
+    isSpecial
+    ttc {
+        description
+        name
+        title
+        unit
+        value
+    }
   }
 }
 `);
+// TODO: separate query for description and ttc
 
 export const getAllShips = async () => {
     const { data, error } = await getClient().query({ query: allShipsQuery });
@@ -85,7 +100,7 @@ export const getShipsFiltered = (data: Vehicles, filters: Filters) => {
             !filters.search ||
             filters.search.length === 0 ||
             (v?.title as string).toUpperCase().includes(filters.search.toUpperCase());
-        return type && nation && tier && title;
+        return type && nation && tier && title && !v?.isClan && !v?.isSpecial;
     });
     return { data: fitlered, error: null };
 };

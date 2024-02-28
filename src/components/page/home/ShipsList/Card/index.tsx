@@ -1,7 +1,9 @@
 import roman from '@/lib/levels';
 import Image from 'next/image';
-import Link from 'next/link';
+import { Suspense } from 'react';
 import Bg from './Bg';
+import DetailedView from './DetailedView';
+import Details from './Details';
 import glow from './images/glow.svg';
 
 type ShipTypeData = {
@@ -15,21 +17,41 @@ type ShipNationData = {
     color: string;
 };
 
-type ShipData = {
+export type TtcData = {
+    description?: string;
+    name?: string;
+    title?: string;
+    unit?: string;
+    value?: number;
+};
+
+export type ShipData = {
     id: string;
     title: string;
     level: string | number;
     image: string;
     type: ShipTypeData;
     nation: ShipNationData;
+    description: string;
+    imageLarge: string;
+    ttc: TtcData[];
 };
 
-export default function Card({ data: { id, image, title, level, type, nation } }: { data: ShipData }) {
+export default function Card({ data }: { data: ShipData }) {
+    const { id, image, title, level, type, nation } = data;
     return (
         <li className="group relative grid aspect-[16/9] overflow-hidden [grid-template-areas:stack]">
-            <Link className="absolute inset-0 z-10" href={`/ship/${id}`}>
-                <span className="sr-only">Подробнее</span>
-            </Link>
+            {/* <Link className="absolute inset-0 z-10" href={`/ship/${id}`}>
+
+            </Link> */}
+            <DetailedView
+                // data={{ id, image, title, level, type, nation }}
+                className="absolute inset-0 z-10"
+            >
+                <Suspense fallback={<div>Загрузка...</div>}>
+                    <Details data={data} />
+                </Suspense>
+            </DetailedView>
             <div className="w-[90%] place-self-center [grid-area:stack]" aria-hidden>
                 <Image
                     src={nation.icon}

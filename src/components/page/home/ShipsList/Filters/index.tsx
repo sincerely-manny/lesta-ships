@@ -138,8 +138,8 @@ export default function ShipsListFilters({
                     setChecked={setTiersChecked}
                     title="Уровни"
                     name="tiers"
-                    options={Array.from({ length: 9 }, (_, i) => {
-                        const tier = i + 2;
+                    options={Array.from({ length: 10 }, (_, i) => {
+                        const tier = i + 1;
                         return {
                             optKey: tier.toString(),
                             optTitle: roman(tier) ?? tier.toString(),

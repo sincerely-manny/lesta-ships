@@ -56,10 +56,8 @@ export const viewport: Viewport = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
     return (
-        <html lang="en">
-            <body
-                className={`font-sans ${inter.variable} from-secondary-1 min-h-screen bg-gradient-to-br to-black text-white`}
-            >
+        <html lang="en" className="from-secondary-1 min-h-screen bg-gradient-to-br to-black">
+            <body className={`font-sans ${inter.variable} min-h-screen text-white`}>
                 <div className="container mx-auto p-5">
                     <Header className="mb-10" />
                     {children}

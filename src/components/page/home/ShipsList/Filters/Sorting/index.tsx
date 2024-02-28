@@ -2,7 +2,7 @@ import { Button } from '@/components/ui/button';
 import Label from '@/components/ui/label';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
-import { ChevronDown, SortDesc } from 'lucide-react';
+import { ArrowDownAz, ChevronDown } from 'lucide-react';
 import { type Dispatch, useEffect, useRef, useState, type SetStateAction } from 'react';
 import { twMerge } from 'tailwind-merge';
 
@@ -55,7 +55,7 @@ export default function Sorting({ className = '', sorted, setSorted, applyFilter
                         ref={buttonRef}
                     >
                         <span>
-                            <SortDesc className="mr-1 inline" size={16} />
+                            <ArrowDownAz className="mr-1 inline" size={16} />
                             <span className="sr-only">Сортировать:</span>
                             {sortingOptions.find((option) => option.value === sorted)?.label ?? 'Сортировка'}
                         </span>
@@ -69,7 +69,7 @@ export default function Sorting({ className = '', sorted, setSorted, applyFilter
                 >
                     <RadioGroup defaultValue={sorted} value={sorted} onValueChange={handleValueChange}>
                         {sortingOptions.map((option) => (
-                            <div className="flex items-center space-x-2" key={option.value}>
+                            <div className="flex items-center space-x-2" key={`sortby-${option.value}`}>
                                 <RadioGroupItem value={option.value} id={`sortby-${option.value}`} tabIndex={0} />
                                 <Label htmlFor={`sortby-${option.value}`}>{option.label}</Label>
                             </div>

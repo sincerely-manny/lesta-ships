@@ -13,7 +13,7 @@ import { TypedDocumentNode as DocumentNode } from '@graphql-typed-document-node/
  * Therefore it is highly recommended to use the babel or swc plugin for production.
  */
 const documents = {
-    "query ExampleQuery {\n  vehicles(lang: \"ru\", isCatalogue: true) {\n    id\n    title\n    description\n    icons {\n      large\n      medium\n    }\n    level\n    type {\n      name\n    \ttitle\n      icons {\n        default\n      }\n    }\n    nation {\n      name\n      title\n      color\n      icons {\n        small\n        medium\n        large\n      }\n    }\n  }\n}\n": types.ExampleQueryDocument,
+    "query AllShipsQuery {\n  vehicles(lang: \"ru\", isCatalogue: false) {\n    id\n    title\n    titleShort\n    description\n    icons {\n      large\n      medium\n    }\n    level\n    type {\n      name\n    \ttitle\n      icons {\n        default\n      }\n    }\n    nation {\n      name\n      title\n      color\n      icons {\n        small\n        medium\n        large\n      }\n    }\n    isClan\n    isPremium\n    isSpecial\n    ttc {\n        description\n        name\n        title\n        unit\n        value\n    }\n  }\n}\n": types.AllShipsQueryDocument,
 };
 
 /**
@@ -33,7 +33,7 @@ export function gql(source: string): unknown;
 /**
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
-export function gql(source: "query ExampleQuery {\n  vehicles(lang: \"ru\", isCatalogue: true) {\n    id\n    title\n    description\n    icons {\n      large\n      medium\n    }\n    level\n    type {\n      name\n    \ttitle\n      icons {\n        default\n      }\n    }\n    nation {\n      name\n      title\n      color\n      icons {\n        small\n        medium\n        large\n      }\n    }\n  }\n}\n"): (typeof documents)["query ExampleQuery {\n  vehicles(lang: \"ru\", isCatalogue: true) {\n    id\n    title\n    description\n    icons {\n      large\n      medium\n    }\n    level\n    type {\n      name\n    \ttitle\n      icons {\n        default\n      }\n    }\n    nation {\n      name\n      title\n      color\n      icons {\n        small\n        medium\n        large\n      }\n    }\n  }\n}\n"];
+export function gql(source: "query AllShipsQuery {\n  vehicles(lang: \"ru\", isCatalogue: false) {\n    id\n    title\n    titleShort\n    description\n    icons {\n      large\n      medium\n    }\n    level\n    type {\n      name\n    \ttitle\n      icons {\n        default\n      }\n    }\n    nation {\n      name\n      title\n      color\n      icons {\n        small\n        medium\n        large\n      }\n    }\n    isClan\n    isPremium\n    isSpecial\n    ttc {\n        description\n        name\n        title\n        unit\n        value\n    }\n  }\n}\n"): (typeof documents)["query AllShipsQuery {\n  vehicles(lang: \"ru\", isCatalogue: false) {\n    id\n    title\n    titleShort\n    description\n    icons {\n      large\n      medium\n    }\n    level\n    type {\n      name\n    \ttitle\n      icons {\n        default\n      }\n    }\n    nation {\n      name\n      title\n      color\n      icons {\n        small\n        medium\n        large\n      }\n    }\n    isClan\n    isPremium\n    isSpecial\n    ttc {\n        description\n        name\n        title\n        unit\n        value\n    }\n  }\n}\n"];
 
 export function gql(source: string) {
   return (documents as any)[source] ?? {};

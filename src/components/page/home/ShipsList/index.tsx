@@ -1,4 +1,4 @@
-import Card from './Card';
+import Card, { type TtcData } from './Card';
 import ShipsListPagination from './Pagination';
 import ShipsListFilters from './Filters';
 import {
@@ -57,6 +57,9 @@ export default async function ShipsList({ limit = 24, page = 1, filters, sort }:
                                 color: (v?.nation?.color as string) ?? '',
                                 icon: `https:${v?.nation?.icons?.large}`,
                             },
+                            description: (v?.description as string) ?? '',
+                            imageLarge: `https:${v?.icons?.large}`,
+                            ttc: (v?.ttc as TtcData[]) ?? [],
                         }}
                     />
                 ))}

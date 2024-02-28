@@ -90,11 +90,11 @@ export default function ShipsListFilters({
         setIsLoading(false);
     }, [applied]);
 
-    const filterClassName = 'w-[400px] md:w-auto';
+    const filterClassName = 'w-full md:w-auto';
 
     return (
         <div className={twMerge('flex w-full flex-col gap-3', className)}>
-            <div className="flex w-full flex-col flex-wrap items-center justify-start gap-2 md:flex-row md:gap-5">
+            <div className="flex w-full flex-col flex-wrap items-stretch justify-start gap-2 md:flex-row md:items-center md:gap-5">
                 <TextSearch
                     value={searchText}
                     setValue={setSearchText}
@@ -102,7 +102,7 @@ export default function ShipsListFilters({
                     className={filterClassName}
                 />
                 <Sorting
-                    className="w-[400px] md:w-36"
+                    className="w-full md:w-36"
                     sorted={selectedSort}
                     setSorted={setSelectedSort}
                     applyFilters={applyFilters}
@@ -149,7 +149,7 @@ export default function ShipsListFilters({
                     className={filterClassName}
                 />
             </div>
-            <div className="mx-auto flex min-h-6 w-[400px] flex-wrap gap-3 text-xs md:w-full">
+            <div className="mx-auto flex min-h-6 flex-wrap gap-3 text-xs md:w-full">
                 <ResetTags
                     setters={[setTypesChecked, setTiersChecked, setNationsChecked]}
                     applyFilters={applyFilters}

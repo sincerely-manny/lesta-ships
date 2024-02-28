@@ -46,7 +46,7 @@ export default function Sorting({ className = '', sorted, setSorted, applyFilter
     return (
         <div>
             <Popover onOpenChange={handleOpenChange} open={open}>
-                <PopoverTrigger asChild>
+                <PopoverTrigger asChild className="w-full">
                     <Button
                         variant="secondary"
                         size="sm"

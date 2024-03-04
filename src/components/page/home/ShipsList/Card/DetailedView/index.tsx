@@ -4,7 +4,7 @@ import { Button } from '@/components/ui/button';
 import { Drawer, DrawerClose, DrawerContent, DrawerFooter, DrawerTrigger } from '@/components/ui/drawer';
 import { ArrowLeft } from 'lucide-react';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
-import { useState, type PropsWithChildren } from 'react';
+import { useState, type PropsWithChildren, useEffect } from 'react';
 import { twMerge } from 'tailwind-merge';
 
 type DetailedViewProps = PropsWithChildren & {
@@ -18,6 +18,7 @@ export default function DetailedView({ className = '', children = null, shipId }
     const searchParams = useSearchParams();
     const viewId = searchParams.get('view');
     const [isOpen, setIsOpen] = useState(viewId === shipId);
+    const [route, setRoute] = useState(`${pathname}?${searchParams.toString()}`);
     const handleOpenChange = (v: boolean) => {
         const params = new URLSearchParams(searchParams.toString());
         if (v) {
@@ -27,8 +28,13 @@ export default function DetailedView({ className = '', children = null, shipId }
             setIsOpen(false);
             params.delete('view');
         }
-        router.push(`${pathname}?${params.toString()}`);
+        setRoute(`${pathname}?${params.toString()}`);
+        // router.push(`${pathname}?${params.toString()}`);
     };
+    // updating route through useEffect fixes (the bug) resetting scroll on closing drawer
+    useEffect(() => {
+        router.push(route);
+    }, [route, router]);
     return (
         <Drawer onOpenChange={handleOpenChange} open={isOpen}>
             <DrawerTrigger className={twMerge('focus-visible:outline-0', className)}>

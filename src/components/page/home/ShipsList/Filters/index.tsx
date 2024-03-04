@@ -83,7 +83,7 @@ export default function ShipsListFilters({
         }
         setIsLoading(true);
         // cleunup page query
-        router.push(`${pathname}?${filtersQuery.toString()}`);
+        router.push(`${pathname}?${filtersQuery.toString()}`, { scroll: false });
         setFiltersQueryPrev(filtersQuery);
     }, [filtersQuery, pathname, router, filtersQueryPrev]);
     useEffect(() => {

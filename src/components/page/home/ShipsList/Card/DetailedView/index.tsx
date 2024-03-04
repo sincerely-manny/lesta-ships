@@ -18,7 +18,6 @@ export default function DetailedView({ className = '', children = null, shipId }
     const searchParams = useSearchParams();
     const viewId = searchParams.get('view');
     const [isOpen, setIsOpen] = useState(viewId === shipId);
-    const [route, setRoute] = useState(`${pathname}?${searchParams.toString()}`);
     const handleOpenChange = (v: boolean) => {
         const params = new URLSearchParams(searchParams.toString());
         if (v) {
@@ -28,13 +27,8 @@ export default function DetailedView({ className = '', children = null, shipId }
             setIsOpen(false);
             params.delete('view');
         }
-        setRoute(`${pathname}?${params.toString()}`);
-        // router.push(`${pathname}?${params.toString()}`);
+        router.push(`${pathname}?${params.toString()}`, { scroll: false });
     };
-    // updating route through useEffect fixes (the bug) resetting scroll on closing drawer
-    useEffect(() => {
-        router.push(route);
-    }, [route, router]);
     return (
         <Drawer onOpenChange={handleOpenChange} open={isOpen}>
             <DrawerTrigger className={twMerge('focus-visible:outline-0', className)}>

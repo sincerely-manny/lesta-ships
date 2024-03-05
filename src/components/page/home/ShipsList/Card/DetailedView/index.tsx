@@ -17,7 +17,7 @@ export default function DetailedView({ className = '', children = null, shipId }
     const pathname = usePathname();
     const searchParams = useSearchParams();
     const viewId = searchParams.get('view');
-    const [isOpen, setIsOpen] = useState(viewId === shipId);
+    const [isOpen, setIsOpen] = useState(false);
     const handleOpenChange = (v: boolean) => {
         const params = new URLSearchParams(searchParams.toString());
         if (v) {
@@ -29,6 +29,9 @@ export default function DetailedView({ className = '', children = null, shipId }
         }
         router.push(`${pathname}?${params.toString()}`, { scroll: false });
     };
+    useEffect(() => {
+        setIsOpen(viewId === shipId);
+    }, [viewId, shipId]);
     return (
         <Drawer onOpenChange={handleOpenChange} open={isOpen}>
             <DrawerTrigger className={twMerge('focus-visible:outline-0', className)}>

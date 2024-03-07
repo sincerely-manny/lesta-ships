@@ -25,7 +25,7 @@ export default async function Details({ data: { imageLarge, nation, title, level
             <div className="aspect-[16/9] w-full max-w-[600px] xl:max-w-max">
                 <div className="absolute left-0 top-0 z-10">
                     <h2 className="flex items-center gap-2 text-3xl font-bold">
-                        <Image src={type.icon} alt={type.title} width={50} height={50} />
+                        <Image src={type.icon} alt={type.title} width={50} height={50} unoptimized />
                         {title}
                     </h2>
                     <p className="text-xl">
@@ -39,6 +39,7 @@ export default async function Details({ data: { imageLarge, nation, title, level
                         width={700}
                         height={700}
                         className="h-auto max-w-full object-cover opacity-10"
+                        unoptimized
                     />
                 </div>
                 <div className="relative">
@@ -48,6 +49,7 @@ export default async function Details({ data: { imageLarge, nation, title, level
                         width={800}
                         height={800}
                         className="h-auto max-w-full object-cover opacity-100"
+                        unoptimized
                     />
                 </div>
             </div>

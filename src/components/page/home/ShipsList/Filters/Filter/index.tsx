@@ -94,7 +94,9 @@ export default function Filter({
                         <label htmlFor={`${name}-${optKey}`}>
                             <span>{optTitle}</span>
                         </label>
-                        {optIcon && <Image src={optIcon} alt={optTitle} width={24} height={16} className="inline" />}
+                        {optIcon && (
+                            <Image src={optIcon} alt={optTitle} width={24} height={16} className="inline" unoptimized />
+                        )}
                     </div>
                 ))}
             </PopoverContent>

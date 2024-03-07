@@ -44,6 +44,7 @@ export default function Card({ data }: { data: ShipData }) {
                     className="h-auto max-w-full object-cover opacity-10 transition-opacity duration-500 group-hover:opacity-20"
                     width={400}
                     height={300}
+                    unoptimized
                 />
             </div>
             <div
@@ -56,6 +57,7 @@ export default function Card({ data }: { data: ShipData }) {
                     className="object-fit translate-y-1/3 opacity-10 transition-opacity duration-300 group-hover:opacity-50"
                     fill
                     sizes="100vw"
+                    unoptimized
                 />
             </div>
             <Bg
@@ -70,8 +72,7 @@ export default function Card({ data }: { data: ShipData }) {
                     width={400}
                     height={300}
                     key={id}
-                    // placeholder="blur"
-                    // blurDataURL="/image/placeholder.png"
+                    unoptimized
                 />
             </div>
 
@@ -82,7 +83,7 @@ export default function Card({ data }: { data: ShipData }) {
                         <div className="flex items-center gap-1 opacity-60" aria-hidden>
                             <span title={`Уровень ${level}`}>{roman(level)}</span>
                             <span className="relative size-8" title={type.title}>
-                                <Image src={type.icon} alt={type.title} fill />
+                                <Image src={type.icon} alt={type.title} fill unoptimized />
                             </span>
                         </div>
                     </div>

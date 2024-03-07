@@ -24,6 +24,7 @@ export default function Header({ className }: HTMLProps<HTMLDivElement>) {
                             maxWidth: '100%',
                             height: 'auto',
                         }}
+                        unoptimized
                     />
                 </span>
             ) : (
@@ -38,6 +39,7 @@ export default function Header({ className }: HTMLProps<HTMLDivElement>) {
                             maxWidth: '100%',
                             height: 'auto',
                         }}
+                        unoptimized
                     />
                 </Link>
             )}
